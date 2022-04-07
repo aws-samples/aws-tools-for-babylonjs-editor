@@ -1,4 +1,4 @@
-# sumerian-plugin-add-host
+# sumerian-hosts
 
 A set of tools that enables BabylonJS editor workflows with Amazon Sumerian Hosts.
 
