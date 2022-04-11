@@ -1,9 +1,7 @@
-import * as React from 'react';
-
+import {Menu} from '@blueprintjs/core';
 // eslint-disable-next-line import/no-unresolved
 import {Editor} from 'babylonjs-editor';
-import {Menu} from '@blueprintjs/core';
-
+import * as React from 'react';
 import SumerianAddHostMenu from './hostMenu';
 
 /**
@@ -24,7 +22,7 @@ interface ISumerianToolbarProps {
 
 /**
  * The Sumerian toolbar is a single button that, when clicked, shows a drop-down menu
- * of helpful tools and dialogs that allow the user to interact with AWS, the Sumerian hosts, etc.
+ * of helpful tools and dialogs that allow the user to interact with AWS, the Sumerian Hosts, etc.
  */
 // eslint-disable-next-line react/prefer-stateless-function
 class SumerianToolbar extends React.Component<ISumerianToolbarProps> {

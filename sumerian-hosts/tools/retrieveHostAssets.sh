@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # This script downloads the asset files this plugin needs from the 
-# repository https://github.com/aws-samples/amazon-sumerian-hosts
+# repository: https://github.com/aws-samples/amazon-sumerian-hosts
 # It assumes it is being run from the root of the package.
 
 if ! git --version 2>&1 >/dev/null

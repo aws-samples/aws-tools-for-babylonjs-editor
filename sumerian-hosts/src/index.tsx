@@ -1,12 +1,10 @@
-import * as React from 'react';
 // eslint-disable-next-line import/no-unresolved
 import {Editor, IPlugin, IPluginConfiguration} from 'babylonjs-editor';
-
-import SumerianToolbar from './toolbar';
-
 // We need to call this when the plugin is loaded so that the required file loaders
 // (specifically for gltf) are properly loaded into the engine.
 import 'babylonjs-loaders';
+import * as React from 'react';
+import SumerianToolbar from './toolbar';
 
 /**
  * Registers the plugin by returning the IPlugin content.

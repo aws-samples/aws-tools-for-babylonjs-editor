@@ -1,0 +1,5 @@
+{
+    "runtimeDependencies": {
+        "aws-sdk": "^2.1096.0"
+    }
+}
