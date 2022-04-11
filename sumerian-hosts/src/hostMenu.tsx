@@ -1,13 +1,16 @@
 /* eslint-disable import/no-unresolved */
-import React from 'react';
 import {MenuItem} from '@blueprintjs/core';
-import {Editor, WorkSpace, SceneExporter} from 'babylonjs-editor';
-
+import {Editor, SceneExporter, WorkSpace} from 'babylonjs-editor';
+import path from 'path';
+import React from 'react';
+import {SumerianHostAdder} from './hostAdder';
 import {
   AssetsNotFoundError,
   DependenciesNotInstalledError,
-  SumerianHostAdder,
-} from './hostAdder';
+  prepareWorkspace,
+  RelativeAssetsDir,
+  RelativeWorkspaceScriptsPath,
+} from './workplace';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const configuration = require('../config/SceneRequirements.json');
@@ -51,17 +54,15 @@ export default class SumerianAddHostMenu extends React.Component<ISumerianAddHos
           'Adding dependencies to scene'
         );
         const workSpaceDir = WorkSpace.DirPath ?? '';
-        await SumerianHostAdder.prepareWorkspace(
+        await prepareWorkspace(
           pluginPath,
           workSpaceDir,
           configuration.runtimeDependencies
         );
 
         editor.updateTaskFeedback(addHostProgress, 15, 'Validating assets');
-        const hostAdder = new SumerianHostAdder(
-          workSpaceDir,
-          selectedCharacter
-        );
+        const assetsDir = path.join(workSpaceDir, RelativeAssetsDir);
+        const hostAdder = new SumerianHostAdder(assetsDir, selectedCharacter);
 
         editor.updateTaskFeedback(addHostProgress, 25, 'Adding host to scene');
         const characterAsset = await hostAdder.addToScene(currentScene);
@@ -71,7 +72,10 @@ export default class SumerianAddHostMenu extends React.Component<ISumerianAddHos
           50,
           'Attaching initialization script to host'
         );
-        hostAdder.attachInitScriptToHost(characterAsset);
+        hostAdder.attachInitScriptToHost(
+          characterAsset,
+          RelativeWorkspaceScriptsPath
+        );
 
         editor.updateTaskFeedback(addHostProgress, 75, 'Updating editor');
 

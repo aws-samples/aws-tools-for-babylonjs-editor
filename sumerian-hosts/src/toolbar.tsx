@@ -1,9 +1,7 @@
-import * as React from 'react';
-
+import {Menu} from '@blueprintjs/core';
 // eslint-disable-next-line import/no-unresolved
 import {Editor} from 'babylonjs-editor';
-import {Menu} from '@blueprintjs/core';
-
+import * as React from 'react';
 import SumerianAddHostMenu from './hostMenu';
 
 /**
