@@ -6,10 +6,11 @@ import React from 'react';
 import {SumerianHostAdder} from './hostAdder';
 import {
   AssetsNotFoundError,
-  DependenciesNotInstalledError,
+  installDependencies,
   prepareWorkspace,
   RelativeAssetsDir,
   RelativeWorkspaceScriptsPath,
+  WorkspaceNotPreparedError,
 } from './workplace';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -43,24 +44,44 @@ export default class SumerianAddHostMenu extends React.Component<ISumerianAddHos
     const {editor, pluginPath} = this.props;
     const currentScene = editor.scene;
     const selectedCharacter = event.target.textContent;
-
+    const workSpaceDir = WorkSpace.DirPath ?? '';
     const addHostProgress = editor.addTaskFeedback(100, 'Adding Sumerian Host');
 
     if (currentScene) {
+      // First - try to install dependencies in the scene
+      // It is not a hard blocker if this does not succeed, as the main reason this fails is because
+      // npm cannot be found - in which case the user has a manual workaround available to them to fix this
       try {
         editor.updateTaskFeedback(
           addHostProgress,
           0,
-          'Adding dependencies to scene'
+          'Installing dependencies in scene'
         );
-        const workSpaceDir = WorkSpace.DirPath ?? '';
-        await prepareWorkspace(
-          pluginPath,
+
+        await installDependencies(
           workSpaceDir,
           configuration.runtimeDependencies
         );
+      } catch (error) {
+        editor.console.logError(
+          'Dependencies were not successfully installed due to error: '
+        );
+        editor.console.logError(error.message);
+        editor.console.logError(
+          'You will need to manually run `npm install` on the required dependencies in the workspace'
+        );
+      }
 
-        editor.updateTaskFeedback(addHostProgress, 15, 'Validating assets');
+      try {
+        editor.updateTaskFeedback(
+          addHostProgress,
+          10,
+          'Copying required files into scene'
+        );
+
+        await prepareWorkspace(pluginPath, workSpaceDir);
+
+        editor.updateTaskFeedback(addHostProgress, 20, 'Validating assets');
         const assetsDir = path.join(workSpaceDir, RelativeAssetsDir);
         const hostAdder = new SumerianHostAdder(assetsDir, selectedCharacter);
 
@@ -91,7 +112,7 @@ export default class SumerianAddHostMenu extends React.Component<ISumerianAddHos
         );
       } catch (error) {
         let errorMessage =
-          'An error has occurred while adding a Sumerian Host. See next line for details:';
+          'An error has occurred while adding a Sumerian Host:';
         let errorStatus = 'An error has occurred while adding a Sumerian Host';
         switch (error.constructor) {
           case AssetsNotFoundError:
@@ -100,9 +121,9 @@ export default class SumerianAddHostMenu extends React.Component<ISumerianAddHos
             errorStatus =
               'An error has ocurred while initializing a Sumerian Host';
             break;
-          case DependenciesNotInstalledError:
+          case WorkspaceNotPreparedError:
             errorMessage =
-              'An error has occurred while installing necessary npm dependencies in your workspace.';
+              'An error has occurred while copying necessary files into your workspace.';
             errorStatus = 'An error has ocurred while preparing the workspace';
             break;
           default:
