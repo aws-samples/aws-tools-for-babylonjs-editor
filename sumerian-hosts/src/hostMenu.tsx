@@ -11,7 +11,7 @@ import {
   RelativeAssetsDir,
   RelativeWorkspaceScriptsPath,
   WorkspaceNotPreparedError,
-} from './workplace';
+} from './workspace';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const configuration = require('../config/SceneRequirements.json');
@@ -68,7 +68,7 @@ export default class SumerianAddHostMenu extends React.Component<ISumerianAddHos
         );
         editor.console.logError(error.message);
         editor.console.logError(
-          'You will need to manually run `npm install` on the required dependencies in the workspace'
+          'For any failed npm installs above, run each listed install command manually from the root of this Editor workspace.'
         );
       }
 
@@ -85,13 +85,17 @@ export default class SumerianAddHostMenu extends React.Component<ISumerianAddHos
         const assetsDir = path.join(workSpaceDir, RelativeAssetsDir);
         const hostAdder = new SumerianHostAdder(assetsDir, selectedCharacter);
 
-        editor.updateTaskFeedback(addHostProgress, 25, 'Adding host to scene');
+        editor.updateTaskFeedback(
+          addHostProgress,
+          25,
+          'Adding Sumerian Host to scene'
+        );
         const characterAsset = await hostAdder.addToScene(currentScene);
 
         editor.updateTaskFeedback(
           addHostProgress,
           50,
-          'Attaching initialization script to host'
+          'Attaching initialization script to Sumerian Host'
         );
         hostAdder.attachInitScriptToHost(
           characterAsset,
@@ -108,7 +112,7 @@ export default class SumerianAddHostMenu extends React.Component<ISumerianAddHos
         editor.updateTaskFeedback(
           addHostProgress,
           100,
-          'Successfully added Sumerian host'
+          'Successfully added Sumerian Host'
         );
       } catch (error) {
         let errorMessage =
@@ -135,7 +139,7 @@ export default class SumerianAddHostMenu extends React.Component<ISumerianAddHos
         editor.console.logError(error.message);
         editor.updateTaskFeedback(addHostProgress, 0, errorStatus);
       } finally {
-        editor.graph.refresh(); // update editor's scene graph to show the new host node
+        editor.graph.refresh(); // update editor's scene graph to show the new Host node
         editor.closeTaskFeedback(addHostProgress, 15000);
       }
     }
@@ -143,7 +147,7 @@ export default class SumerianAddHostMenu extends React.Component<ISumerianAddHos
 
   public render(): React.ReactNode {
     return (
-      <MenuItem icon="new-object" text="Add host">
+      <MenuItem icon="new-object" text="Add Host">
         {this.availableHosts.map((characterId) => (
           <MenuItem
             key={`add-${characterId}`}

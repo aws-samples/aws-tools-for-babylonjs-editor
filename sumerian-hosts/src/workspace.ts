@@ -35,15 +35,15 @@ class AssetsNotFoundError extends Error {
 }
 
 // These are all relative to the package.json file of the respective projects
-const RelativeAssetsDir = 'assets/gLTF/';
+const RELATIVE_ASSETS_DIR = 'assets/gLTF/';
 
-const RelativePluginScriptPath = 'scripts/sumerianhost.ts';
+const RELATIVE_PLUGIN_SCRIPT_PATH = 'scripts/sumerianhost.ts';
 
 // BabylonJS Editor expects to find scripts here, in the sense that
 // if you were to create a script in the editor, it would be created here
-const RelativeWorkspaceScriptsPath = 'src/scenes/sumerianhost.ts';
+const RELATIVE_WORKSPACE_SCRIPT_PATH = 'src/scenes/sumerianhost.ts';
 
-const copyDirectory = async (fromDir: string, toDir: string) => {
+const copyDirectory = async (fromDir: string, toDir: string): Promise<void> => {
   await fs.promises.mkdir(toDir, {recursive: true}); // will create nested directories if they don't exist
   await fs.copy(fromDir, toDir, {
     overwrite: false,
@@ -55,13 +55,14 @@ const copyDirectory = async (fromDir: string, toDir: string) => {
  * This method runs `npm install` of all required runtime directories on the workspace directory
  * @param workSpaceDir The absolute path to the workspace open in the BabylonJS Editor
  * @param runtimeDependencies An object that contains runtime dependencies and their versions as key-value pairs
+ * @throws {DependenciesNotInstalledError}
  */
 const installDependencies = async (
   workSpaceDir: string,
   runtimeDependencies: {
     [name: string]: string;
   }
-) => {
+): Promise<void> => {
   try {
     // Check the environment for the path to the interactive shell,
     // which is likely to have $PATH set correctly to find npm.
@@ -99,16 +100,20 @@ const installDependencies = async (
  * plugin directory to the workspace directory - assets, scripts, etc.
  * @param pluginDir The absolute path to the directory where the plugin resides
  * @param workSpaceDir The absolute path to the workspace open in the BabylonJS Editor
+ * @throws {WorkspaceNotPreparedError}
  */
-const prepareWorkspace = async (pluginDir: string, workSpaceDir: string) => {
+const prepareWorkspace = async (
+  pluginDir: string,
+  workSpaceDir: string
+): Promise<void> => {
   try {
     const copyPromises: any[] = [];
 
     // copy runtime script `sumerianhost.ts`
-    const pluginScriptPath = path.join(pluginDir, RelativePluginScriptPath);
+    const pluginScriptPath = path.join(pluginDir, RELATIVE_PLUGIN_SCRIPT_PATH);
     const workspaceScriptPath = path.join(
       workSpaceDir,
-      RelativeWorkspaceScriptsPath
+      RELATIVE_WORKSPACE_SCRIPT_PATH
     );
 
     copyPromises.push(
@@ -116,8 +121,8 @@ const prepareWorkspace = async (pluginDir: string, workSpaceDir: string) => {
     );
 
     // copy asset directory into the workspace, so that they will be bundled relative to the workspace
-    const pluginAssetDir = path.join(pluginDir, RelativeAssetsDir);
-    const workspaceAssetDir = path.join(workSpaceDir, RelativeAssetsDir);
+    const pluginAssetDir = path.join(pluginDir, RELATIVE_ASSETS_DIR);
+    const workspaceAssetDir = path.join(workSpaceDir, RELATIVE_ASSETS_DIR);
 
     copyPromises.push(copyDirectory(pluginAssetDir, workspaceAssetDir));
 
@@ -135,11 +140,13 @@ const prepareWorkspace = async (pluginDir: string, workSpaceDir: string) => {
  * This method validates that the assets directory exists - the assets
  * must be asynchronously downloaded as part of the plugin, and are thus not
  * guaranteed to exist.
+ * @param assetsDir The path to the assets directory
+ * @throws {AssetsNotFoundError}
  */
-const validateAssetsPath = (assetsDir: string) => {
+const validateAssetsPath = (assetsDir: string): void => {
   if (!fs.existsSync(assetsDir)) {
     throw new AssetsNotFoundError(
-      `Sumerian host assets could not be found at ${assetsDir}`
+      `Sumerian Host assets could not be found at ${assetsDir}`
     );
   }
 };
@@ -151,6 +158,6 @@ export {
   AssetsNotFoundError,
   DependenciesNotInstalledError,
   WorkspaceNotPreparedError,
-  RelativeAssetsDir,
-  RelativeWorkspaceScriptsPath,
+  RELATIVE_ASSETS_DIR as RelativeAssetsDir,
+  RELATIVE_WORKSPACE_SCRIPT_PATH as RelativeWorkspaceScriptsPath,
 };

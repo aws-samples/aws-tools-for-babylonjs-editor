@@ -7,9 +7,9 @@
     "license": "Apache 2.0",
     "scripts": {
         "compile": "tsc -p .",
-        "lint": "eslint . --ext .tsx --ext .ts",
-        "lint-fix": "eslint . --ext .tsx --ext .ts --fix",
-        "format": "prettier 'src/**/*.ts*' --write",
+        "lint": "eslint . ",
+        "lint-fix": "eslint . --fix",
+        "format": "prettier 'src/**/*.ts*' 'scripts/*.ts*' --write",
         "build": "npm run format && npm run lint-fix && npm run compile && npm run copy-config",
         "watch": "tsc -p . --watch",
         "copy-config": "cp -R ./config ./build/",
@@ -41,7 +41,9 @@
         "aws-sdk": "^2.1096.0",
         "babylonjs": "^4.2.1",
         "babylonjs-loaders": "4.2.1",
-        "fs-extra": "^10.0.1",
+        "fs-extra": "^10.0.1"
+    },
+    "peerDependencies": {
         "react": "^17.0.2"
     },
     "prettier": {

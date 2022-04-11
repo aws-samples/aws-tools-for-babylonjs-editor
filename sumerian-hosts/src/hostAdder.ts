@@ -4,7 +4,7 @@
 
 import {HostObject} from '@amazon-sumerian-hosts/babylon';
 import {AssetContainer, Scene, SceneLoader} from 'babylonjs';
-import {validateAssetsPath} from './workplace';
+import {validateAssetsPath} from './workspace';
 
 /**
  * This class is responsible for the process of adding a Sumerian Host to a workspace,
@@ -12,7 +12,7 @@ import {validateAssetsPath} from './workplace';
  */
 class SumerianHostAdder {
   /**
-   * The full path to the assets directory from which the host files should be loaded
+   * The full path to the assets directory from which the Host files should be loaded
    */
   assetsDir: string;
 
@@ -31,7 +31,7 @@ class SumerianHostAdder {
   /**
    *
    * @param projectDir The absolute path to the assets directory
-   * @param characterId The identifier of the host we wish to add
+   * @param characterId The identifier of the Host we wish to add
    */
   constructor(assetsDir: string, characterId: string) {
     this.assetsDir = assetsDir;
@@ -56,7 +56,7 @@ class SumerianHostAdder {
    * @returns {Babylon.AssetContainer}
    */
   public async addToScene(scene: Scene) {
-    // this renders the host in the current scene
+    // this renders the Host in the current scene
     const characterAsset = await SceneLoader.LoadAssetContainerAsync(
       this.characterConfig.modelUrl,
       undefined,
