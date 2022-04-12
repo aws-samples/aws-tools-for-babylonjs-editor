@@ -106,5 +106,3 @@ export function getDefaultDomainForBranch(
 ): string {
   return `https://${branch}.${appId}.amplifyapp.com`;
 }
-
-export const exportedForTesting = {zipFile};
