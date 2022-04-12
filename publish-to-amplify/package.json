@@ -24,7 +24,7 @@
         "@typescript-eslint/eslint-plugin": "^5.12.1",
         "@typescript-eslint/parser": "^5.12.1",
         "aws-sdk-client-mock": "^0.6.2",
-        "babylonjs-editor": "^4.0.4",
+        "babylonjs-editor": "^4.1.0",
         "eslint": "^8.9.0",
         "eslint-config-airbnb": "^19.0.4",
         "eslint-config-prettier": "^8.3.0",
