@@ -1,3 +1,5 @@
 node_modules
 build
 *.d.ts
+declaration
+coverage

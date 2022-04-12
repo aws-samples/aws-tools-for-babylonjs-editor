@@ -4,15 +4,19 @@ import {
   CreateAppCommand,
   ListAppsCommand,
   GetBranchCommand,
-  // GetJobCommand,
+  GetJobCommand,
   CreateBranchCommand,
+  StartDeploymentCommand,
+  CreateDeploymentCommand,
 } from '@aws-sdk/client-amplify';
 import {
   getExistingAmplifyAppId,
   createAmplifyApp,
   checkExistingAmplifyBranch,
-  // waitJobToSucceed,
+  waitJobToSucceed,
   createAmplifyBranch,
+  startAmplifyDeployment,
+  createAmplifyDeployment,
 } from '../src/amplifyUtils';
 
 /**
@@ -21,12 +25,12 @@ import {
 const amplifyClient = new AmplifyClient({});
 const amplifyMock = mockClient(amplifyClient);
 
-// The mocked Amplify app object
+// The mocked Amplify App object
 const mockApp = {
   appId: '1234',
   name: 'testApp',
   appArn: '',
-  description: 'The Mocked App Object',
+  description: 'The mocked Amplify App object',
   createTime: new Date(),
   updateTime: new Date(),
   repository: '',
@@ -37,10 +41,11 @@ const mockApp = {
   enableBasicAuth: true,
 };
 
+// The mocked Amplify Branch object
 const mockBranch = {
   branchName: 'testBranch',
   branchArn: '',
-  description: 'The mocked Amplify branch',
+  description: 'The mocked Amplify Branch object',
   stage: '',
   displayName: '',
   enableNotification: true,
@@ -57,44 +62,44 @@ const mockBranch = {
   enablePullRequestPreview: true,
 };
 
-// const mockSucceedJob = {
-//   summary: {
-//     jobArn: '',
-//     jobId: 'testId',
-//     commitId: '',
-//     commitMessage: '',
-//     commitTime: new Date(),
-//     startTime: new Date(),
-//     jobType: '',
-//     status: 'SUCCEED',
-//   },
-//   steps: [],
-// };
+// The mocked Amplify succeed job object
+const mockSucceedJob = {
+  summary: {
+    jobArn: '',
+    jobId: 'testId',
+    commitId: '',
+    commitMessage: '',
+    commitTime: new Date(),
+    startTime: new Date(),
+    jobType: '',
+    status: 'SUCCEED',
+  },
+  steps: [],
+};
 
-// const mockFailedJob = {
-//   summary: {
-//     jobArn: '',
-//     jobId: 'testId',
-//     commitId: '',
-//     commitMessage: '',
-//     commitTime: new Date(),
-//     startTime: new Date(),
-//     jobType: '',
-//     status: 'FAILED',
-//   },
-//   steps: [],
-// };
+// The mocked Amplify failed job object
+const mockFailedJob = {
+  summary: {
+    jobArn: '',
+    jobId: 'testId',
+    commitId: '',
+    commitMessage: '',
+    commitTime: new Date(),
+    startTime: new Date(),
+    jobType: '',
+    status: 'FAILED',
+  },
+  steps: [],
+};
 
 describe('getExistingAmplifyAppId', () => {
-  /**
-   * To be sure that unit tests are independent from each other,
-   * reset mock behavior between the tests.
-   */
+  // To be sure that unit tests are independent from each other,
+  // reset mock behavior between the tests.
   beforeEach(() => {
     amplifyMock.reset();
   });
 
-  it('should return appId from the Amplify after calling getExistingAmplifyAppId', async () => {
+  it('should return appId after calling getExistingAmplifyAppId with the existing app name', async () => {
     amplifyMock.on(ListAppsCommand).resolves({
       apps: [mockApp],
     });
@@ -104,12 +109,15 @@ describe('getExistingAmplifyAppId', () => {
     expect(appId).toBe('1234');
   });
 
-  it('should return undefined from the Amplify after calling getExistingAmplifyAppId', async () => {
+  it('should return undefined after calling getExistingAmplifyAppId with nonexisting app name', async () => {
     amplifyMock.on(ListAppsCommand).resolves({
       apps: [mockApp],
     });
 
-    const appId = await getExistingAmplifyAppId('wrongAppName', amplifyClient);
+    const appId = await getExistingAmplifyAppId(
+      'nonExistingAppName',
+      amplifyClient
+    );
 
     expect(appId).toBe(undefined);
   });
@@ -120,7 +128,7 @@ describe('createAmplifyApp', () => {
     amplifyMock.reset();
   });
 
-  it('should return appId from the Amplify after calling createAmplifyApp', async () => {
+  it('should return appId from the Amplify after calling createAmplifyApp with the right app name', async () => {
     amplifyMock.on(CreateAppCommand, {name: 'testApp'}).resolves({
       app: mockApp,
     });
@@ -142,7 +150,6 @@ describe('checkExistingAmplifyBranch', () => {
       .resolves({
         branch: mockBranch,
       });
-    // amplifyClient.send(new CreateCommand({'1234', 'testBranch'}));
     const doesExist = await checkExistingAmplifyBranch(
       '1234',
       'testBranch',
@@ -163,6 +170,7 @@ describe('checkExistingAmplifyBranch', () => {
       'nonexistingBranch',
       amplifyClient
     );
+
     expect(doesExist).toBe(false);
   });
 
@@ -176,70 +184,101 @@ describe('checkExistingAmplifyBranch', () => {
       'testBranch',
       amplifyClient
     );
+
     expect(doesExist).toBe(false);
   });
 });
 
-// describe('waitJobToSucceed', () => {
-//   beforeEach(() => {
-//     amplifyMock.reset();
-//   });
-
-//   it('should throw error after calling waitJobToSucceed with a failed job', async () => {
-//     const mockCall = amplifyMock.on(GetJobCommand).resolves({
-//       job: mockSucceedJob,
-//     });
-//     // jest.setTimeout(30000);
-//     await waitJobToSucceed('1234', 'testBranch', 'testId', amplifyClient);
-//     expect(mockCall).toHaveBeenCalledTimes(1);
-//   });
-// });
-
-describe('createAmplifyBranch', () => {
+describe('waitJobToSucceed', () => {
   beforeEach(() => {
     amplifyMock.reset();
   });
 
+  it('should resolve Promise<void> when the job succeeds', async () => {
+    amplifyMock.on(GetJobCommand).resolves({
+      job: mockSucceedJob,
+    });
+    // Since the waitJobToSucceed will return Promise<void> when the job succeeds and a
+    // Promise<void> resolves to an undefined, we test the resolves result to be undefined here.
+    await expect(
+      waitJobToSucceed('1234', 'testBranch', 'testJob', amplifyClient)
+    ).resolves.toBe(undefined);
+  });
+
   it('should throw error after calling waitJobToSucceed with a failed job', async () => {
+    amplifyMock.on(GetJobCommand).resolves({
+      job: mockFailedJob,
+    });
+
+    await expect(
+      waitJobToSucceed('1234', 'testBranch', 'testJob', amplifyClient)
+    ).rejects.toThrow('Job failed.');
+  });
+});
+
+describe('createAmplifyBranch', () => {
+  it('check whether the amplify CreateBranchCommand is called with the right arguments', async () => {
     let passedCommand;
-    amplifyClient.send = jest.fn((CreateBranchCommand) => {
-      passedCommand = CreateBranchCommand;
+    amplifyClient.send = jest.fn((command) => {
+      passedCommand = command;
       return Promise.resolve();
     });
     await createAmplifyBranch('1234', 'testBranch', amplifyClient);
 
-    let expectCommand = new CreateBranchCommand({appId: '1234', branchName: 'testBranch'});
+    const expectCommand = new CreateBranchCommand({
+      appId: '1234',
+      branchName: 'testBranch',
+    });
 
-    expect(amplifyClient.send).toHaveBeenCalled();
+    expect(amplifyClient.send).toHaveBeenCalledTimes(1);
     expect(passedCommand.input.appId).toBe(expectCommand.input.appId);
     expect(passedCommand.input.branchName).toBe(expectCommand.input.branchName);
   });
 });
 
-// describe('startAmplifyDeployment', () => {
-//   beforeEach(() => {
-//     amplifyMock.reset();
-//   });
+describe('startAmplifyDeployment', () => {
+  it('check whether the amplify StartDeploymentCommand is called with the right arguments', async () => {
+    let passedCommand;
+    amplifyClient.send = jest.fn((command) => {
+      passedCommand = command;
+      return Promise.resolve();
+    });
+    await startAmplifyDeployment(
+      '1234',
+      'testBranch',
+      'testJob',
+      amplifyClient
+    );
 
-//   it('should throw error after calling startAmplifyDeployment with a failed job', async () => {
-//     amplifyMock
-//       .on(GetJobCommand, {appId: '1234'})
-//       .resolves({})
-//     await waitJobToSucceed('1234', 'testBranch', '1', amplifyClient);
-//     expect(amplifyMock.calls()).toHaveLen
-//   });
-// });
+    const expectCommand = new StartDeploymentCommand({
+      appId: '1234',
+      branchName: 'testBranch',
+      jobId: 'testJob',
+    });
 
-// describe('createAmplifyDeployment', () => {
-//   beforeEach(() => {
-//     amplifyMock.reset();
-//   });
+    expect(amplifyClient.send).toHaveBeenCalledTimes(1);
+    expect(passedCommand.input.appId).toBe(expectCommand.input.appId);
+    expect(passedCommand.input.branchName).toBe(expectCommand.input.branchName);
+    expect(passedCommand.input.jobId).toBe(expectCommand.input.jobId);
+  });
+});
 
-//   it('should throw error after calling startAmplifyDeployment with a failed job', async () => {
-//     amplifyMock
-//       .on(GetJobCommand, {appId: '1234'})
-//       .resolves({})
-//     await waitJobToSucceed('1234', 'testBranch', '1', amplifyClient);
-//     expect(amplifyMock.calls()).toHaveLen
-//   });
-// });
+describe('createAmplifyDeployment', () => {
+  it('check whether the amplify CreateDeploymentCommand is called with the right arguments', async () => {
+    let passedCommand;
+    amplifyClient.send = jest.fn((command) => {
+      passedCommand = command;
+      return Promise.resolve();
+    });
+    await createAmplifyDeployment('1234', 'testBranch', amplifyClient);
+
+    const expectCommand = new CreateDeploymentCommand({
+      appId: '1234',
+      branchName: 'testBranch',
+    });
+
+    expect(amplifyClient.send).toHaveBeenCalledTimes(1);
+    expect(passedCommand.input.appId).toBe(expectCommand.input.appId);
+    expect(passedCommand.input.branchName).toBe(expectCommand.input.branchName);
+  });
+});
