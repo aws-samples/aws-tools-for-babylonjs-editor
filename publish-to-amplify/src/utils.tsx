@@ -14,7 +14,10 @@ import {WorkSpace} from 'babylonjs-editor';
  * @throws Can throw the same errors thrown by fetch().
  * See [fetch documentation]{@link https://developer.mozilla.org/en-US/docs/Web/API/fetch} for details.
  */
-async function httpPutFile(filePath: fs.PathLike, url: string): Promise<void> {
+export async function httpPutFile(
+  filePath: fs.PathLike,
+  url: string
+): Promise<void> {
   await fetch(url, {
     method: 'PUT',
     body: fs.readFileSync(filePath),
@@ -35,7 +38,7 @@ async function zipFile(
   destFilePath: string
 ): Promise<string> {
   if (!fs.pathExistsSync(sourceDir)) {
-    throw new Error('Please ensure your build artifacts path exists.');
+    throw new Error('Please ensure the build artifacts path exists.');
   }
   const archive = archiver(destFilePath, {store: true});
   await archive.directory(sourceDir, false);
@@ -49,7 +52,7 @@ async function zipFile(
  * @returns A Promise object that resolves the zip file path.
  * @throws An error if it fails to get WorkSpace DirPath or it does not exist.
  */
-async function zipArtifacts(folderPrefix: string): Promise<string> {
+export async function zipArtifacts(folderPrefix: string): Promise<string> {
   let tmpDir: string | undefined;
   const workSpaceDirPath = WorkSpace.DirPath;
   try {
@@ -74,7 +77,7 @@ async function zipArtifacts(folderPrefix: string): Promise<string> {
       const indexHTML = path.join(workSpaceDirPath, 'index.html');
       fs.copyFileSync(indexHTML, tempIndexHTML);
     } else {
-      throw new Error(`Cannot get WorkSpace DirPath or it does not exist.`);
+      throw new Error(`Cannot get WorkSpace DirPath, or it does not exist.`);
     }
     const zipFilePath = `${tmpDir}.zip`;
     return await zipFile(tmpDir, zipFilePath);
@@ -97,8 +100,11 @@ async function zipArtifacts(folderPrefix: string): Promise<string> {
  * @param branch The Amplify environment branch name.
  * @returns The domain url for the given appId with the branch.
  */
-function getDefaultDomainForBranch(appId: string, branch: string): string {
+export function getDefaultDomainForBranch(
+  appId: string,
+  branch: string
+): string {
   return `https://${branch}.${appId}.amplifyapp.com`;
 }
 
-export {httpPutFile, zipArtifacts, getDefaultDomainForBranch};
+export const exportedForTesting = {zipFile};
