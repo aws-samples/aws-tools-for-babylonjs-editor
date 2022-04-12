@@ -43,15 +43,22 @@ export const getExistingAmplifyAppId = async (
  * @returns A Promise that resolves to an app ID string.
  * If an app created with the input "appName", that app ID will be returned.
  * Otherwise, an error will be thrown.
+ * @throws An error with the specific error information why the app fails to be created.
  */
 export const createAmplifyApp = async (
   appName: string,
   client: AmplifyClient
 ): Promise<string | undefined> => {
-  const createAppResponse = await client.send(
-    new CreateAppCommand({name: appName})
-  );
-  return createAppResponse.app?.appId;
+  try {
+    const createAppResponse = await client.send(
+      new CreateAppCommand({name: appName})
+    );
+    return createAppResponse.app?.appId;
+  } catch (error) {
+    throw new Error(
+      `The app ${appName} could not be created due to: ${error.message}`
+    );
+  }
 };
 
 /**

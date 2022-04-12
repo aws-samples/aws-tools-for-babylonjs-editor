@@ -128,7 +128,7 @@ describe('createAmplifyApp', () => {
     amplifyMock.reset();
   });
 
-  it('should return appId from the Amplify after calling createAmplifyApp with the right app name', async () => {
+  it('should return appId after calling createAmplifyApp with the right app name', async () => {
     amplifyMock.on(CreateAppCommand, {name: 'testApp'}).resolves({
       app: mockApp,
     });
@@ -137,6 +137,16 @@ describe('createAmplifyApp', () => {
 
     expect(appId).toBe('1234');
   });
+
+  it('should throw error after calling createAmplifyApp when CreateAppCommand throws an error.', async () => {
+    amplifyMock
+      .on(CreateAppCommand, {name: 'testApp'})
+      .rejects('mocked rejection');
+
+    await expect(createAmplifyApp('testApp', amplifyClient)).rejects.toThrow(
+      'The app testApp could not be created due to: mocked rejection'
+    );
+  });
 });
 
 describe('checkExistingAmplifyBranch', () => {
@@ -144,7 +154,7 @@ describe('checkExistingAmplifyBranch', () => {
     amplifyMock.reset();
   });
 
-  it('should return true from the Amplify after calling checkExistingAmplifyBranch with the existing amplify branch', async () => {
+  it('should return true after calling checkExistingAmplifyBranch with the existing amplify branch', async () => {
     amplifyMock
       .on(GetBranchCommand, {appId: '1234', branchName: 'testBranch'})
       .resolves({
@@ -160,7 +170,7 @@ describe('checkExistingAmplifyBranch', () => {
     expect(doesExist).toBe(true);
   });
 
-  it('should return false from the Amplify after calling checkExistingAmplifyBranch with the nonexisting amplify branch', async () => {
+  it('should return false after calling checkExistingAmplifyBranch with the nonexisting amplify branch', async () => {
     amplifyMock.on(GetBranchCommand, {appId: '1234'}).resolves({
       branch: undefined,
     });
