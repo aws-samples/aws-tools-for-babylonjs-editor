@@ -99,7 +99,7 @@ describe('getExistingAmplifyAppId', () => {
     amplifyMock.reset();
   });
 
-  it('should return appId after calling getExistingAmplifyAppId with the existing app name', async () => {
+  it('should return appId after calling getExistingAmplifyAppId with an existing app name', async () => {
     amplifyMock.on(ListAppsCommand).resolves({
       apps: [mockApp],
     });
@@ -109,13 +109,26 @@ describe('getExistingAmplifyAppId', () => {
     expect(appId).toBe('1234');
   });
 
-  it('should return undefined after calling getExistingAmplifyAppId with nonexisting app name', async () => {
+  it('should return undefined after calling getExistingAmplifyAppId with a nonexisting app name', async () => {
     amplifyMock.on(ListAppsCommand).resolves({
       apps: [mockApp],
     });
 
     const appId = await getExistingAmplifyAppId(
       'nonExistingAppName',
+      amplifyClient
+    );
+
+    expect(appId).toBe(undefined);
+  });
+
+  it('should return undefined after calling getExistingAmplifyAppId with an empty app name', async () => {
+    amplifyMock.on(ListAppsCommand).resolves({
+      apps: [mockApp],
+    });
+
+    const appId = await getExistingAmplifyAppId(
+      '',
       amplifyClient
     );
 
@@ -128,7 +141,7 @@ describe('createAmplifyApp', () => {
     amplifyMock.reset();
   });
 
-  it('should return appId after calling createAmplifyApp with the right app name', async () => {
+  it('should return appId from createAmplifyApp function with the right app name', async () => {
     amplifyMock.on(CreateAppCommand, {name: 'testApp'}).resolves({
       app: mockApp,
     });
@@ -138,13 +151,13 @@ describe('createAmplifyApp', () => {
     expect(appId).toBe('1234');
   });
 
-  it('should throw error after calling createAmplifyApp when CreateAppCommand throws an error.', async () => {
+  it('should throw error from createAmplifyApp function when CreateAppCommand throws an error.', async () => {
     amplifyMock
-      .on(CreateAppCommand, {name: 'testApp'})
+      .on(CreateAppCommand, {name: 'invalidName'})
       .rejects('mocked rejection');
 
-    await expect(createAmplifyApp('testApp', amplifyClient)).rejects.toThrow(
-      'The app testApp could not be created due to: mocked rejection'
+    await expect(createAmplifyApp('invalidName', amplifyClient)).rejects.toThrow(
+      'The app invalidName could not be created due to: mocked rejection'
     );
   });
 });
@@ -165,7 +178,6 @@ describe('checkExistingAmplifyBranch', () => {
       'testBranch',
       amplifyClient
     );
-    console.log(`doesExist: ${doesExist}`);
 
     expect(doesExist).toBe(true);
   });
@@ -228,9 +240,9 @@ describe('waitJobToSucceed', () => {
 
 describe('createAmplifyBranch', () => {
   it('check whether the amplify CreateBranchCommand is called with the right arguments', async () => {
-    let passedCommand;
+    let actualCommand;
     amplifyClient.send = jest.fn((command) => {
-      passedCommand = command;
+      actualCommand = command;
       return Promise.resolve();
     });
     await createAmplifyBranch('1234', 'testBranch', amplifyClient);
@@ -241,16 +253,16 @@ describe('createAmplifyBranch', () => {
     });
 
     expect(amplifyClient.send).toHaveBeenCalledTimes(1);
-    expect(passedCommand.input.appId).toBe(expectCommand.input.appId);
-    expect(passedCommand.input.branchName).toBe(expectCommand.input.branchName);
+    expect(actualCommand.input.appId).toBe(expectCommand.input.appId);
+    expect(actualCommand.input.branchName).toBe(expectCommand.input.branchName);
   });
 });
 
 describe('startAmplifyDeployment', () => {
   it('check whether the amplify StartDeploymentCommand is called with the right arguments', async () => {
-    let passedCommand;
+    let actualCommand;
     amplifyClient.send = jest.fn((command) => {
-      passedCommand = command;
+      actualCommand = command;
       return Promise.resolve();
     });
     await startAmplifyDeployment(
@@ -267,17 +279,17 @@ describe('startAmplifyDeployment', () => {
     });
 
     expect(amplifyClient.send).toHaveBeenCalledTimes(1);
-    expect(passedCommand.input.appId).toBe(expectCommand.input.appId);
-    expect(passedCommand.input.branchName).toBe(expectCommand.input.branchName);
-    expect(passedCommand.input.jobId).toBe(expectCommand.input.jobId);
+    expect(actualCommand.input.appId).toBe(expectCommand.input.appId);
+    expect(actualCommand.input.branchName).toBe(expectCommand.input.branchName);
+    expect(actualCommand.input.jobId).toBe(expectCommand.input.jobId);
   });
 });
 
 describe('createAmplifyDeployment', () => {
   it('check whether the amplify CreateDeploymentCommand is called with the right arguments', async () => {
-    let passedCommand;
+    let actualCommand;
     amplifyClient.send = jest.fn((command) => {
-      passedCommand = command;
+      actualCommand = command;
       return Promise.resolve();
     });
     await createAmplifyDeployment('1234', 'testBranch', amplifyClient);
@@ -288,7 +300,7 @@ describe('createAmplifyDeployment', () => {
     });
 
     expect(amplifyClient.send).toHaveBeenCalledTimes(1);
-    expect(passedCommand.input.appId).toBe(expectCommand.input.appId);
-    expect(passedCommand.input.branchName).toBe(expectCommand.input.branchName);
+    expect(actualCommand.input.appId).toBe(expectCommand.input.appId);
+    expect(actualCommand.input.branchName).toBe(expectCommand.input.branchName);
   });
 });

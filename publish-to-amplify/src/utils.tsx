@@ -38,7 +38,9 @@ async function zipFile(
   destFilePath: string
 ): Promise<string> {
   if (!fs.pathExistsSync(sourceDir)) {
-    throw new Error('Please ensure the build artifacts path exists.');
+    throw new Error(
+      `Please ensure the build artifacts path ${sourceDir} exists.`
+    );
   }
   const archive = archiver(destFilePath, {store: true});
   await archive.directory(sourceDir, false);
@@ -77,7 +79,9 @@ export async function zipArtifacts(folderPrefix: string): Promise<string> {
       const indexHTML = path.join(workSpaceDirPath, 'index.html');
       fs.copyFileSync(indexHTML, tempIndexHTML);
     } else {
-      throw new Error(`Cannot get WorkSpace DirPath, or it does not exist.`);
+      throw new Error(
+        `Cannot get WorkSpace directory ${workSpaceDirPath}, or it does not exist.`
+      );
     }
     const zipFilePath = `${tmpDir}.zip`;
     return await zipFile(tmpDir, zipFilePath);
