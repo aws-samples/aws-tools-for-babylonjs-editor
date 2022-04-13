@@ -1,9 +1,11 @@
 /* eslint-disable import/no-unresolved */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint no-param-reassign: ["error", { "props": false }] */
+/* eslint-disable class-methods-use-this */
 
 import {HostObject} from '@amazon-sumerian-hosts/babylon';
 import {AssetContainer, Material, Scene, SceneLoader, Texture} from 'babylonjs';
+import {existsSync} from 'fs';
 import path from 'path';
 import {validateAssetsPath} from './workspace';
 
@@ -70,7 +72,7 @@ class SumerianHostAdder {
     // the workspace assets dir is intended to be found one directory above the host assets
     const workspaceAssetsDir = path.join(this.assetsDir, '..');
 
-    this.fixTextures(workspaceAssetsDir, characterAsset.textures);
+    this.fixTextures(workspaceAssetsDir, characterAsset.textures as Texture[]);
     this.fixMaterials(workspaceAssetsDir, characterAsset.materials);
 
     characterAsset.addAllToScene();
@@ -81,18 +83,21 @@ class SumerianHostAdder {
   /**
    * The editor expects the properties of textures that point to where they're
    * stored to be relative paths that are based off the workspace's asset directory,
-   * rather than the absolute ones that the default SceneLoader sets.
+   * rather than the absolute ones that the default GLTF asset loader sets.
    *
    * @param workspaceAssetsDir The absolute path to the workspace's assets directory
    * @param textures The array of textures to be fixed
    */
-  // eslint-disable-next-line class-methods-use-this
-  private async fixTextures(workspaceAssetsDir: string, textures: any[]) {
+  private async fixTextures(workspaceAssetsDir: string, textures: Texture[]) {
     textures.forEach((tex: Texture) => {
-      if (tex.url) {
-        // the url is prefixed with 'data:' which we want to get rid of
-        // to find the absolute path to the texture directory
+      if (tex.url && tex.url.startsWith('data:')) {
         const textureDir = tex.url.split(':')[1];
+
+        // check to ensure that this is actually a directory, and not embedded data --
+        // we expect it to be the absolute path to the texture directory
+        if (!existsSync(textureDir)) {
+          return;
+        }
 
         const relativeTextureDir = path.dirname(
           path.relative(workspaceAssetsDir, textureDir)
