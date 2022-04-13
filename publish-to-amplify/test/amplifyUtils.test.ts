@@ -127,10 +127,7 @@ describe('getExistingAmplifyAppId', () => {
       apps: [mockApp],
     });
 
-    const appId = await getExistingAmplifyAppId(
-      '',
-      amplifyClient
-    );
+    const appId = await getExistingAmplifyAppId('', amplifyClient);
 
     expect(appId).toBe(undefined);
   });
@@ -156,7 +153,9 @@ describe('createAmplifyApp', () => {
       .on(CreateAppCommand, {name: 'invalidName'})
       .rejects('mocked rejection');
 
-    await expect(createAmplifyApp('invalidName', amplifyClient)).rejects.toThrow(
+    await expect(
+      createAmplifyApp('invalidName', amplifyClient)
+    ).rejects.toThrow(
       'The app invalidName could not be created due to: mocked rejection'
     );
   });
