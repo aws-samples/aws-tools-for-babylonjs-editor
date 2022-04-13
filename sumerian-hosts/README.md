@@ -5,10 +5,10 @@ A set of tools that enables BabylonJS editor workflows with Amazon Sumerian Host
 ## Development instructions
 
 1. Because we rely on packages that have not yet been published to the NPM registry, you will need to run `git clone` on `mainline2.0` of the [Amazon Sumerian Hosts](https://github.com/aws-samples/amazon-sumerian-hosts/tree/mainline2.0) repository to pull it somewhere local. From that repository, run `npm run build` and then cd into the `packages/amazon-sumerian-hosts-babylon` directory and run `npm link` to make the submodule available locally.
-1. From the plugin directory, run `npm link @amazon-sumerian-hosts/babylon`
 1. Install the other plugin dependencies defined in `package.json`:  
    `npm install`  
    **Note that this will download the required asset files as a script run during post-install -- this may take a while!**
+1. From the plugin directory, run `npm link @amazon-sumerian-hosts/babylon`
 1. Format, lint, and compile the Typescript code into Javascript
    `npm run build`
 
