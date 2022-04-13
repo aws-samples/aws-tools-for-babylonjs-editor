@@ -27,6 +27,7 @@ type SumerianHostAssets = {
 type SumerianHostVoiceConfiguration = {
   voice: string;
   engine: string;
+  language: string;
 };
 
 export default class SumerianHost extends Mesh {
@@ -99,7 +100,9 @@ export default class SumerianHost extends Mesh {
     );
   }
 
-  private static instantiateAWSCredentials(cognitoIdentityPoolId: string): AWS.CognitoIdentityCredentials {
+  private static instantiateAWSCredentials(
+    cognitoIdentityPoolId: string
+  ): AWS.CognitoIdentityCredentials {
     return new AWS.CognitoIdentityCredentials({
       IdentityPoolId: cognitoIdentityPoolId,
     });
@@ -111,7 +114,9 @@ export default class SumerianHost extends Mesh {
     return cognitoIdentityPoolId.split(':')[0];
   }
 
-  private static validateCognitoIdentityPoolId(cognitoIdentityPoolId: string): boolean {
+  private static validateCognitoIdentityPoolId(
+    cognitoIdentityPoolId: string
+  ): boolean {
     return (
       cognitoIdentityPoolId &&
       cognitoIdentityPoolId !== SumerianHost.initialCognitoIdValue
@@ -145,7 +150,8 @@ export default class SumerianHost extends Mesh {
         host,
         scene,
         pollyConfig.voice,
-        pollyConfig.engine
+        pollyConfig.engine,
+        pollyConfig.language
       );
     } else {
       console.error(

@@ -98,6 +98,7 @@ class SumerianHostAdder {
           this.characterConfig.modelUrl
         ),
         engine: 'neural',
+        language: 'en-US',
       },
     };
 
