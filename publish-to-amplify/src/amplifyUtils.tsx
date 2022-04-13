@@ -24,15 +24,21 @@ export const getExistingAmplifyAppId = async (
   appName: string,
   client: AmplifyClient
 ): Promise<string | undefined> => {
-  const listAppResponse = await client.send(new ListAppsCommand({}));
-  if (listAppResponse.apps) {
-    const existingApp = listAppResponse.apps.find(
-      (app) => app.name === appName && app.appId
-    );
-    if (existingApp && existingApp.appId) {
-      return existingApp.appId;
+  let nextToken;
+  /* eslint-disable no-await-in-loop */
+  do {
+    const listAppResponse = await client.send(new ListAppsCommand({nextToken}));
+    if (listAppResponse.apps) {
+      const existingApp = listAppResponse.apps.find(
+        (app) => app.name === appName && app.appId
+      );
+      if (existingApp && existingApp.appId) {
+        return existingApp.appId;
+      }
     }
-  }
+    nextToken = listAppResponse.nextToken;
+  } while (nextToken);
+  /* eslint-enable no-await-in-loop */
   return undefined;
 };
 
