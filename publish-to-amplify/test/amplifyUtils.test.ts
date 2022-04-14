@@ -26,9 +26,23 @@ const amplifyClient = new AmplifyClient({});
 const amplifyMock = mockClient(amplifyClient);
 
 // The mocked Amplify App object
-const mockApp = {
+const mockApp1 = {
   appId: '1234',
-  name: 'testApp',
+  name: 'testApp1',
+  appArn: '',
+  description: 'The mocked Amplify App object',
+  createTime: new Date(),
+  updateTime: new Date(),
+  repository: '',
+  enableBranchAutoBuild: true,
+  platform: '',
+  environmentVariables: {},
+  defaultDomain: '',
+  enableBasicAuth: true,
+};
+const mockApp2 = {
+  appId: '5678',
+  name: 'testApp2',
   appArn: '',
   description: 'The mocked Amplify App object',
   createTime: new Date(),
@@ -101,17 +115,17 @@ describe('getExistingAmplifyAppId', () => {
 
   it('should return appId after calling getExistingAmplifyAppId with an existing app name', async () => {
     amplifyMock.on(ListAppsCommand).resolves({
-      apps: [mockApp],
+      apps: [mockApp1, mockApp2],
     });
 
-    const appId = await getExistingAmplifyAppId('testApp', amplifyClient);
+    const appId = await getExistingAmplifyAppId('testApp1', amplifyClient);
 
     expect(appId).toBe('1234');
   });
 
   it('should return undefined after calling getExistingAmplifyAppId with a nonexisting app name', async () => {
     amplifyMock.on(ListAppsCommand).resolves({
-      apps: [mockApp],
+      apps: [mockApp1, mockApp2],
     });
 
     const appId = await getExistingAmplifyAppId(
@@ -124,10 +138,37 @@ describe('getExistingAmplifyAppId', () => {
 
   it('should return undefined after calling getExistingAmplifyAppId with an empty app name', async () => {
     amplifyMock.on(ListAppsCommand).resolves({
-      apps: [mockApp],
+      apps: [mockApp1, mockApp2],
     });
 
     const appId = await getExistingAmplifyAppId('', amplifyClient);
+
+    expect(appId).toBe(undefined);
+  });
+
+  it('should return the second appId since there is a nextToken in first time ListAppsCommand API call', async () => {
+    amplifyMock
+      .on(ListAppsCommand)
+      .resolvesOnce({
+        apps: [mockApp1],
+        nextToken: 'nextToken',
+      })
+      .resolvesOnce({apps: [mockApp2]});
+
+    const appId = await getExistingAmplifyAppId('testApp2', amplifyClient);
+
+    expect(appId).toBe('5678');
+  });
+
+  it('should return undefined since there is no nextToken in first time ListAppsCommand API call', async () => {
+    amplifyMock
+      .on(ListAppsCommand)
+      .resolvesOnce({
+        apps: [mockApp1],
+      })
+      .resolvesOnce({apps: [mockApp2]});
+
+    const appId = await getExistingAmplifyAppId('testApp2', amplifyClient);
 
     expect(appId).toBe(undefined);
   });
@@ -139,11 +180,11 @@ describe('createAmplifyApp', () => {
   });
 
   it('should return appId from createAmplifyApp function with the right app name', async () => {
-    amplifyMock.on(CreateAppCommand, {name: 'testApp'}).resolves({
-      app: mockApp,
+    amplifyMock.on(CreateAppCommand, {name: 'testApp1'}).resolves({
+      app: mockApp1,
     });
 
-    const appId = await createAmplifyApp('testApp', amplifyClient);
+    const appId = await createAmplifyApp('testApp1', amplifyClient);
 
     expect(appId).toBe('1234');
   });
