@@ -1,9 +1,12 @@
 /* eslint-disable import/no-unresolved */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint no-param-reassign: ["error", { "props": false }] */
+/* eslint-disable class-methods-use-this */
 
 import {HostObject} from '@amazon-sumerian-hosts/babylon';
-import {AssetContainer, Scene, SceneLoader} from 'babylonjs';
+import {AssetContainer, Material, Scene, SceneLoader, Texture} from 'babylonjs';
+import {existsSync} from 'fs';
+import path from 'path';
 import {validateAssetsPath} from './workspace';
 
 /**
@@ -45,13 +48,13 @@ class SumerianHostAdder {
     this.characterId = characterId;
   }
 
-  static getAvailableHosts() {
+  public static getAvailableHosts() {
     return HostObject.getAvailableCharacters();
   }
 
   /**
    * This method adds the model and textures to the current scene,
-   * enabling the host to be rendered
+   * enabling the host to be rendered and exported
    * @param {Babylon.Scene} scene
    * @returns {Babylon.AssetContainer}
    */
@@ -66,9 +69,85 @@ class SumerianHostAdder {
     // rename mesh to something human-readable instead of the default '__root__'
     characterAsset.meshes[0].name = this.characterId;
 
+    // the workspace assets dir is intended to be found one directory above the host assets
+    const workspaceAssetsDir = path.join(this.assetsDir, '..');
+
+    this.fixTextures(workspaceAssetsDir, characterAsset.textures as Texture[]);
+    this.fixMaterials(workspaceAssetsDir, characterAsset.materials);
+
     characterAsset.addAllToScene();
 
     return characterAsset;
+  }
+
+  /**
+   * The editor expects the properties of textures that point to where they're
+   * stored to be relative paths that are based off the workspace's asset directory,
+   * rather than the absolute ones that the default GLTF asset loader sets.
+   *
+   * @param workspaceAssetsDir The absolute path to the workspace's assets directory
+   * @param textures The array of textures to be fixed
+   */
+  private async fixTextures(workspaceAssetsDir: string, textures: Texture[]) {
+    textures.forEach((tex: Texture) => {
+      if (tex.url && tex.url.startsWith('data:')) {
+        const textureDir = tex.url.split(':')[1];
+
+        // check to ensure that this is actually a directory, and not embedded data --
+        // we expect it to be the absolute path to the texture directory
+        if (!existsSync(textureDir)) {
+          return;
+        }
+
+        const relativeTextureDir = path.dirname(
+          path.relative(workspaceAssetsDir, textureDir)
+        );
+
+        const textureFileName = path.basename(tex.url);
+        const relativeTexturePath = path.join(
+          relativeTextureDir,
+          textureFileName
+        );
+
+        // the editor will call path.exists on the name property
+        tex.name = relativeTexturePath;
+        // the texture will then be loaded from the url
+        tex.url = relativeTexturePath;
+      }
+    });
+  }
+
+  /**
+   * The editor expects certain pieces of metadata on materials to be set in order for it to
+   * export and then re-import them correctly.
+   * @param workspaceAssetsDir The absolute path to the workspace's assets directory
+   * @param materials The array of materials to be fixed
+   */
+  private async fixMaterials(
+    workspaceAssetsDir: string,
+    materials: Material[]
+  ) {
+    // the model file points to textures stored in a subdirectory called 'textures'
+    // this will be the absolute path to that directory
+    const textureDirectory = path.join(
+      path.dirname(this.characterConfig.modelUrl),
+      'textures'
+    );
+
+    const relTextureDirectory = path.relative(
+      workspaceAssetsDir,
+      textureDirectory
+    );
+
+    materials.forEach((material: Material) => {
+      material.metadata ??= {};
+      // if this metadata property is not set, the editor
+      // will not export the material
+      material.metadata.editorPath = path.join(
+        relTextureDirectory,
+        `${material.name}.material`
+      );
+    });
   }
 
   /**
