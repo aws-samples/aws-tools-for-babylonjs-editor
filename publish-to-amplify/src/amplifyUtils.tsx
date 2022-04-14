@@ -28,7 +28,7 @@ export const getExistingAmplifyAppId = async (
   /* eslint-disable no-await-in-loop */
   do {
     const listAppResponse = await client.send(new ListAppsCommand({nextToken}));
-    if (listAppResponse.apps) {
+    if (listAppResponse?.apps) {
       const existingApp = listAppResponse.apps.find(
         (app) => app.name === appName && app.appId
       );
@@ -36,7 +36,7 @@ export const getExistingAmplifyAppId = async (
         return existingApp.appId;
       }
     }
-    nextToken = listAppResponse.nextToken;
+    nextToken = listAppResponse?.nextToken;
   } while (nextToken);
   /* eslint-enable no-await-in-loop */
   return undefined;
