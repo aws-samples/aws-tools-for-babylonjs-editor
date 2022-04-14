@@ -108,6 +108,7 @@ export const waitJobToSucceed = async (
     const getResponse = await client.send(
       new GetJobCommand({appId, branchName, jobId})
     );
+
     const jobSummary = getResponse.job?.summary;
     if (jobSummary?.status === 'FAILED') {
       processing = false;
@@ -148,6 +149,7 @@ export const startAmplifyDeployment = async (
   appId: string,
   branchName: string,
   jobId: string,
+
   client: AmplifyClient
 ): Promise<StartDeploymentCommandOutput> =>
   client.send(

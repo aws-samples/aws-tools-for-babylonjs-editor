@@ -211,6 +211,7 @@ export class AmplifyPublishDialog extends React.Component<
       await startAmplifyDeployment(appId, envName, jobId, this.client);
 
       await waitJobToSucceed(appId, envName, jobId, this.client);
+
       const domainAddress = getDefaultDomainForBranch(appId, envName);
       this.setState({domainAddress, status: Status.Success});
       this.props.editor.console.logInfo(domainAddress);
