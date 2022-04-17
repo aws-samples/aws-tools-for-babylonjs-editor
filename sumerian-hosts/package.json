@@ -41,6 +41,7 @@
         "aws-sdk": "^2.1096.0",
         "babylonjs": "^4.2.1",
         "babylonjs-loaders": "4.2.1",
+        "fix-path": "^3.0.0",
         "fs-extra": "^10.0.1"
     },
     "peerDependencies": {

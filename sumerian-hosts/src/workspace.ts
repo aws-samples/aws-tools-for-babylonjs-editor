@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import {exec} from 'child_process';
+import fixPath from 'fix-path';
 import fs from 'fs-extra';
 import os from 'os';
 import path from 'path';
@@ -51,6 +52,19 @@ const copyDirectory = async (fromDir: string, toDir: string): Promise<void> => {
   });
 };
 
+// function fixPath() {
+//   if (process.platform === 'win32') {
+//     return;
+//   }
+
+//   process.env.PATH = [
+//     './node_modules/.bin',
+//     '/.nodebrew/current/bin',
+//     '/usr/local/bin',
+//     process.env.PATH,
+//   ].join(':');
+// }
+
 /**
  * This method runs `npm install` of all required runtime directories on the workspace directory
  * @param workSpaceDir The absolute path to the workspace open in the BabylonJS Editor
@@ -69,6 +83,13 @@ const installDependencies = async (
     // Note that BabylonJS Editor expects npm to be installed locally,
     // so we're reasonably confident it exists.
     const shell = process.env[os.platform() === 'win32' ? 'COMSPEC' : 'SHELL'];
+
+    fixPath();
+
+    console.log(process.env.PATH);
+    //= > '/usr/bin'
+
+    console.log(process.env.PATH);
 
     const installPromises: any[] = [];
 
