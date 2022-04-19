@@ -15,7 +15,7 @@
         "copy-config": "cp -R ./config ./build/",
         "postinstall": "npm run retrieve-assets",
         "retrieve-assets": "./tools/retrieveHostAssets.sh",
-        "release": "npm run lint && npm run compile"
+        "release": "npm run lint && npm run compile && npm run copy-config"
     },
     "devDependencies": {
         "@babel/core": "^7.17.5",
