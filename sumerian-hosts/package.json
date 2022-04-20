@@ -12,9 +12,9 @@
         "format": "prettier src/**/*.ts* scripts/*.ts* --write",
         "build": "npm run format && npm run lint-fix && npm run compile && npm run copy-config",
         "watch": "tsc -p . --watch",
-        "copy-config": "cp -R ./config ./build/",
+        "copy-config": "node tools/copyConfig",
         "postinstall": "npm run retrieve-assets",
-        "retrieve-assets": "./tools/retrieveHostAssets.sh",
+        "retrieve-assets": "node tools/retrieveHostAssets",
         "release": "npm run lint && npm run compile && npm run copy-config"
     },
     "devDependencies": {

@@ -5,7 +5,11 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+      fail-fast: false # continue testing on all platforms even if one fails
     steps:
       - uses: actions/checkout@v3
       # TODO: Add CodeQL setup here
@@ -20,8 +24,8 @@ jobs:
           path: "hosts"
       - uses: actions/setup-node@v1
         with:
-          node-version: '16.x'
-          registry-url: 'https://registry.npmjs.org'
+          node-version: "16.x"
+          registry-url: "https://registry.npmjs.org"
       - run: npm install
         working-directory: "./hosts"
       - run: npm run build
@@ -32,10 +36,8 @@ jobs:
         working-directory: "./sumerian-hosts"
       # END HOSTS SETUP
 
-
       - run: npm install
         working-directory: "./sumerian-hosts"
       - run: npm run release
         working-directory: "./sumerian-hosts"
       # TODO: Perform CodeQL Analysis here
-

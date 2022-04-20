@@ -8,15 +8,18 @@ defaults:
     working-directory: "./publish-to-amplify"
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+      fail-fast: false # continue testing on all platforms even if one fails
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       # TODO: Add CodeQL setup here
       - uses: actions/setup-node@v1
         with:
-          node-version: '16.x'
-          registry-url: 'https://registry.npmjs.org'
+          node-version: "16.x"
+          registry-url: "https://registry.npmjs.org"
       - run: npm install
       - run: npm run release
       # TODO: Perform CodeQL Analysis here
-
