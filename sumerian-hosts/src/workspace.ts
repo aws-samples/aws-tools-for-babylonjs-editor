@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import {exec} from 'child_process';
+import fixPath from 'fix-path';
 import fs from 'fs-extra';
 import os from 'os';
 import path from 'path';
@@ -43,6 +44,11 @@ const RELATIVE_PLUGIN_SCRIPT_PATH = 'scripts/sumerianhost.ts';
 // if you were to create a script in the editor, it would be created here
 const RELATIVE_WORKSPACE_SCRIPT_PATH = 'src/scenes/sumerianhost.ts';
 
+/**
+ * Copy the directory from one path to the other one.
+ * @param fromDir The source directory
+ * @param toDir The destination directory
+ */
 const copyDirectory = async (fromDir: string, toDir: string): Promise<void> => {
   await fs.promises.mkdir(toDir, {recursive: true}); // will create nested directories if they don't exist
   await fs.copy(fromDir, toDir, {
@@ -69,6 +75,8 @@ const installDependencies = async (
     // Note that BabylonJS Editor expects npm to be installed locally,
     // so we're reasonably confident it exists.
     const shell = process.env[os.platform() === 'win32' ? 'COMSPEC' : 'SHELL'];
+
+    fixPath();
 
     const installPromises: any[] = [];
 
