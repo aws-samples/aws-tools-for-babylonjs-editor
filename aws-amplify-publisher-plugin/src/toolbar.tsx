@@ -11,9 +11,9 @@ import {Menu, MenuItem} from '@blueprintjs/core';
 import {AmplifyPublishDialog} from './amplifyPublishDialog';
 
 /**
- * The configuration that the Sumerian Toolbar should be initialized with.
+ * The configuration that the Amplify Toolbar should be initialized with.
  */
-type SumerianToolbarProps = {
+type AmplifyPublisherToolbarProps = {
   /**
    * A reference to the BabylonJS Editor object.
    * @see {@link Editor}
@@ -24,7 +24,7 @@ type SumerianToolbarProps = {
 /**
  * Mutable values that will change at runtime
  */
-type SumerianToolbarState = {
+type AmplifyPublisherToolbarState = {
   /**
    * This boolean state determines whether the Amplify publish dialog
    * is visible and therefore should be rendered to the user
@@ -33,14 +33,14 @@ type SumerianToolbarState = {
 };
 
 /**
- * The Sumerian toolbar is a single button that, when clicked, shows a drop-down menu
- * of helpful tools and dialogs that allow the user to interact with AWS, the Sumerian hosts, etc.
+ * The Amplify toolbar is a single button that, when clicked, shows a drop-down menu
+ * of helpful tools and dialogs that allow the user to interact with AWS.
  */
-export class SumerianToolbar extends React.Component<
-  SumerianToolbarProps,
-  SumerianToolbarState
+export class AmplifyPublisherToolbar extends React.Component<
+  AmplifyPublisherToolbarProps,
+  AmplifyPublisherToolbarState
 > {
-  public constructor(props: Readonly<SumerianToolbarProps>) {
+  public constructor(props: Readonly<AmplifyPublisherToolbarProps>) {
     super(props);
 
     this.state = {

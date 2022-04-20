@@ -1,3 +1,5 @@
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.
 import {Menu} from '@blueprintjs/core';
 // eslint-disable-next-line import/no-unresolved
 import {Editor} from 'babylonjs-editor';
@@ -7,7 +9,7 @@ import SumerianAddHostMenu from './hostMenu';
 /**
  * The configuration that the Sumerian Toolbar should be initialized with.
  */
-interface ISumerianToolbarProps {
+interface IOpenSourceHostsToolbarProps {
   /**
    * A reference to the BabylonJS Editor object.
    * @see {@link Editor}
@@ -25,7 +27,7 @@ interface ISumerianToolbarProps {
  * of helpful tools and dialogs that allow the user to interact with AWS, the Sumerian Hosts, etc.
  */
 // eslint-disable-next-line react/prefer-stateless-function
-class SumerianToolbar extends React.Component<ISumerianToolbarProps> {
+class OpenSourceHostsToolbar extends React.Component<IOpenSourceHostsToolbarProps> {
   public render(): React.ReactNode {
     const {editor, pluginPath} = this.props;
 
@@ -41,4 +43,4 @@ class SumerianToolbar extends React.Component<ISumerianToolbarProps> {
   }
 }
 
-export default SumerianToolbar;
+export default OpenSourceHostsToolbar;

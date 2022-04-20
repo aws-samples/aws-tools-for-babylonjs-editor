@@ -1,10 +1,12 @@
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.
 // eslint-disable-next-line import/no-unresolved
 import {Editor, IPlugin, IPluginConfiguration} from 'babylonjs-editor';
 // We need to call this when the plugin is loaded so that the required file loaders
 // (specifically for gltf) are properly loaded into the engine.
 import 'babylonjs-loaders';
 import * as React from 'react';
-import SumerianToolbar from './toolbar';
+import OpenSourceHostsToolbar from './toolbar';
 
 /**
  * Registers the plugin by returning the IPlugin content.
@@ -23,10 +25,10 @@ export const registerEditorPlugin = (
    */
   toolbar: [
     {
-      buttonLabel: 'Sumerian Host Tools',
+      buttonLabel: 'Open Source Hosts Tools',
       buttonIcon: 'export',
       content: (
-        <SumerianToolbar
+        <OpenSourceHostsToolbar
           editor={editor}
           pluginPath={configuration.pluginAbsolutePath}
         />

@@ -5,7 +5,7 @@ import React from 'react';
 // eslint-disable-next-line import/no-unresolved
 import {Editor, IPlugin} from 'babylonjs-editor';
 
-import {SumerianToolbar} from './toolbar';
+import {AmplifyPublisherToolbar} from './toolbar';
 import {
   AmplifyPublishingPreferences,
   getAmplifyPublishingPreferences,
@@ -23,9 +23,9 @@ export const registerEditorPlugin = (editor: Editor): IPlugin => ({
    */
   toolbar: [
     {
-      buttonLabel: 'Sumerian Tools',
+      buttonLabel: 'AWS Amplify Publisher Tools',
       buttonIcon: 'export',
-      content: <SumerianToolbar editor={editor} />,
+      content: <AmplifyPublisherToolbar editor={editor} />,
     },
   ],
 

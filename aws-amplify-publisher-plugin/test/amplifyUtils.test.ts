@@ -1,3 +1,5 @@
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.
 import {mockClient} from 'aws-sdk-client-mock';
 import {
   AmplifyClient,

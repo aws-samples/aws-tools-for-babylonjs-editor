@@ -1,4 +1,4 @@
-## My Project
+## AWS Tools for Babylon.JS Editor
 
 TODO: Fill this README out!
 

@@ -1,5 +1,5 @@
-# amazon-sumerian-babylon-plugin
-A set of tools that enables one-click publishing to AWS Amplify.
+# AWS Tools for Babylon.JS Editor: AWS Amplify Publisher Plugin
+AWS Tools: Amplify Publisher Plugins is a set of tools that enables one-click publishing to AWS Amplify.
 
 ## Development instructions
 1. Install the plugin dependencies defined in `package.json`:

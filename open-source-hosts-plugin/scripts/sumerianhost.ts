@@ -1,3 +1,5 @@
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.
 import {HostObject} from '@amazon-sumerian-hosts/babylon';
 import {Mesh, Scene} from '@babylonjs/core';
 import * as AWS from 'aws-sdk';
