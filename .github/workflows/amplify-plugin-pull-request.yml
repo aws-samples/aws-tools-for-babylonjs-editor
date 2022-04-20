@@ -5,7 +5,7 @@ on:
 
 defaults:
   run:
-    working-directory: "./publish-to-amplify"
+    working-directory: "./aws-amplify-publisher-plugin"
 jobs:
   build:
     runs-on: ubuntu-latest
