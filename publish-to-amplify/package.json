@@ -12,7 +12,8 @@
         "format": "prettier --config .prettierrc --write 'src/**/*.tsx' 'test/**/**.ts' ",
         "watch": "tsc -p . --watch",
         "test": "jest --coverage --verbose",
-        "clean": "rm -rf node_modules declaration build"
+        "clean": "rm -rf node_modules declaration build",
+        "release" : "npm run lint && npm run compile && npm run test"
     },
     "devDependencies": {
         "@babel/core": "^7.17.5",
