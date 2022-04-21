@@ -1,28 +1,55 @@
-
-
-jest.mock("fs", () => ({
+jest.mock('fs-extra', () => ({
+  ...jest.requireActual('fs-extra'),
   promises: {
-    copyFile: jest.fn(),
-    mkdir: jest.fn()
-  }
+    copyFile: jest.fn().mockResolvedValue(null),
+    mkdir: jest.fn().mockResolvedValue(null),
+  },
+  copy: jest.fn(),
+  existsSync: jest.fn()
 }));
+
 import fs from 'fs-extra';
+import {prepareWorkspace, AssetsNotFoundError, validateAssetsPath, WorkspaceNotPreparedError} from '../src/workspace';
 
-import {prepareWorkspace} from '../src/workspace';
-
-const mockCopy = jest.fn();
-const mockExistsSync = jest.fn();
 
 describe('workspace', () => {
   beforeEach(() => {
     jest.resetAllMocks();
-    jest.spyOn(fs.promises, 'fs.promises.copyFile').mockResolvedValue();
-    jest.spyOn(fs, 'copy').mockImplementation(mockCopy);
-    jest.spyOn(fs, 'existsSync').mockImplementation(mockExistsSync);
   });
 
-  it('should call fs.promise.copyFile', async () => {
-    await prepareWorkspace('testPluginDir', 'testWorkspaceDir');
+  it('should call copyFile and mkdir once separately', async () => {
+    const mockCopy = jest.fn();
+    jest.spyOn(fs, 'copy').mockImplementation(mockCopy);
+    await prepareWorkspace('testPluginDir', 'testWorkSpaceDir');
     expect(fs.promises.copyFile).toHaveBeenCalledTimes(1);
+    expect(fs.promises.mkdir).toHaveBeenCalledTimes(1);
+  });
+
+  it('should throw custom WorkspaceNotPreparedError when there are errors with fs package', async() => {
+    jest.spyOn(fs.promises, 'copyFile').mockRejectedValue(new WorkspaceNotPreparedError("Mocked Error"));
+    const mockCopy = jest.fn();
+    jest.spyOn(fs, 'copy').mockImplementation(mockCopy);
+    await expect(prepareWorkspace('testPluginDir', 'testWorkSpaceDir')).rejects.toThrow(WorkspaceNotPreparedError);
+  });
+
+  it('should return nothing when the assetDir exists', () => {
+    const spyExistsSync = jest
+      .spyOn(fs, 'existsSync')
+      .mockReturnValueOnce(true);
+    validateAssetsPath('testPluginDir');
+    expect(spyExistsSync).toHaveBeenCalledTimes(1);
+  });
+
+  it('should throw Error when the assetDir does not exist', () => {
+    jest.spyOn(fs, 'existsSync').mockReturnValueOnce(false);
+    function testValidateAsset() {
+      validateAssetsPath('testPluginDir');
+    }
+    expect(testValidateAsset).toThrowError(
+      'Sumerian Host assets could not be found at '
+    );
+    expect(testValidateAsset).toThrowError(AssetsNotFoundError);
   });
 });
+
+debugger;
