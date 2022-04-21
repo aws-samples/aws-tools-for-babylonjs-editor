@@ -1,9 +1,18 @@
 {
-    "name": "sumerian-plugin-hosts",
+    "name": "@aws/aws-tools-for-babylonjs-editor-open-source-hosts-plugin",
     "version": "1.0.0",
-    "description": "",
+    "description": "AWS Tools for Babylon.JS Editor: Open Source Hosts Plugin is a set of tools meant to communicate with Amazon Sumerian Hosts (https://github.com/aws-samples/amazon-sumerian-hosts) inside of Babylon.JS Editor",
     "main": "build/src/index.js",
-    "author": "",
+    "author": {
+        "name": "Amazon Web Services",
+        "url": "https://aws.amazon.com",
+        "organization": true
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/aws-samples/aws-tools-for-babylonjs-editor.git",
+        "directory": "open-source-hosts-plugin"
+    },  
     "license": "Apache 2.0",
     "scripts": {
         "compile": "tsc -p .",

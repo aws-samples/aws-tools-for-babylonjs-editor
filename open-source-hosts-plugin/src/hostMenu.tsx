@@ -1,3 +1,5 @@
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 /* eslint-disable import/no-unresolved */
 import {MenuItem} from '@blueprintjs/core';
 import {Editor, SceneExporter, WorkSpace} from 'babylonjs-editor';

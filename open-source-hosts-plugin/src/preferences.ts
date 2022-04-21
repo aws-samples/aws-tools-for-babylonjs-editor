@@ -1,3 +1,5 @@
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 /**
  * These user preferences are used to store any configuration needed to
  * initialize or use a Sumerian Host.

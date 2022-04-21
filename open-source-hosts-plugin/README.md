@@ -1,6 +1,5 @@
-# sumerian-hosts
-
-A set of tools that enables BabylonJS editor workflows with Amazon Sumerian Hosts.
+# AWS Tools for Babylon.JS Editor: Open Source Hosts Plugin
+AWS Tools:  Open Source Hosts Plugins is set of tools that enables BabylonJS editor workflows with Amazon Sumerian Hosts.
 
 ## Development instructions
 

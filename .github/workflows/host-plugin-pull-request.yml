@@ -37,7 +37,7 @@ jobs:
       # END HOSTS SETUP
 
       - run: npm install
-        working-directory: "./sumerian-hosts"
+        working-directory: "./open-source-hosts-plugin"
       - run: npm run release
-        working-directory: "./sumerian-hosts"
+        working-directory: "./open-source-hosts-plugin"
       # TODO: Perform CodeQL Analysis here

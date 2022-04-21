@@ -1,9 +1,18 @@
 {
-    "name": "amazon-sumerian-babylon-plugin",
+    "name": "@aws/aws-tools-for-babylonjs-editor-aws-amplify-publisher-plugin",
     "version": "1.0.0",
-    "description": "",
+    "description": "AWS Tools for Babylon.JS Editor: AWS Amplify Publisher Plugin is a set of tools that enables one-click publishing to AWS Amplify.",
     "main": "build/src/index.js",
-    "author": "",
+    "author": {
+        "name": "Amazon Web Services",
+        "url": "https://aws.amazon.com",
+        "organization": true
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/aws-samples/aws-tools-for-babylonjs-editor.git",
+        "directory": "aws-amplify-publisher-plugin"
+    },    
     "license": "Apache 2.0",
     "scripts": {
         "compile": "tsc -p .",
