@@ -1,5 +1,5 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-// SPDX-License-Identifier: Apache-2.
+// SPDX-License-Identifier: Apache-2.0
 // eslint-disable-next-line import/no-unresolved
 import {Editor, IPlugin, IPluginConfiguration} from 'babylonjs-editor';
 // We need to call this when the plugin is loaded so that the required file loaders
