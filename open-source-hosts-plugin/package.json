@@ -18,8 +18,9 @@
         "compile": "tsc -p .",
         "lint": "eslint . ",
         "lint-fix": "eslint . --fix",
-        "format": "prettier src/**/*.ts* scripts/*.ts* --write",
+        "format": "prettier src/**/*.ts* scripts/*.ts* test/**/**.ts --write",
         "build": "npm run format && npm run lint-fix && npm run compile && npm run copy-config",
+        "test": "jest --verbose",
         "watch": "tsc -p . --watch",
         "copy-config": "node tools/copyConfig",
         "postinstall": "npm run retrieve-assets",
@@ -31,6 +32,7 @@
         "@babel/eslint-parser": "^7.17.0",
         "@babel/preset-react": "^7.16.7",
         "@babel/preset-typescript": "^7.16.7",
+        "@types/jest": "^27.4.1",
         "@typescript-eslint/eslint-plugin": "^5.16.0",
         "@typescript-eslint/parser": "^5.16.0",
         "babylonjs-editor": "^4.1.0",
@@ -41,6 +43,7 @@
         "eslint-plugin-prettier": "^4.0.0",
         "prettier": "^2.5.1",
         "prettier-plugin-organize-imports": "^2.3.4",
+        "ts-jest": "^27.1.4",
         "typescript": "^4.6.2"
     },
     "dependencies": {
