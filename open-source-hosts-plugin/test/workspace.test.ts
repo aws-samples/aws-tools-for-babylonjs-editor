@@ -1,8 +1,6 @@
-import childProcess from 'child_process';
 import fs from 'fs-extra';
 import {
   AssetsNotFoundError,
-  installDependencies,
   prepareWorkspace,
   validateAssetsPath,
   WorkspaceNotPreparedError,
@@ -18,15 +16,6 @@ jest.mock('fs-extra', () => ({
   existsSync: jest.fn(),
 }));
 
-jest.mock('child_process', () => ({
-  ...jest.requireActual('child_process'),
-  exec: jest.fn().mockImplementation(() => ({
-    stdout: 'fake stdout',
-    stderr: 'fake stderr',
-  })),
-}));
-jest.mock('util', () => ({promisify: (fn) => fn}));
-
 describe('workspace', () => {
   beforeEach(() => {
     jest.resetAllMocks();
@@ -39,6 +28,7 @@ describe('workspace', () => {
 
     expect(fs.promises.copyFile).toHaveBeenCalledTimes(1);
     expect(fs.promises.mkdir).toHaveBeenCalledTimes(1);
+    expect(fs.copy).toHaveBeenCalledTimes(1);
   });
 
   it('should throw custom WorkspaceNotPreparedError when there are errors with fs package', async () => {
@@ -73,11 +63,5 @@ describe('workspace', () => {
     );
 
     expect(testValidateAsset).toThrowError(AssetsNotFoundError);
-  });
-
-  it('should call exec once', async () => {
-    await installDependencies('testWorkSpaceDir', {testKey: ''});
-
-    expect(childProcess.exec).toHaveBeenCalledTimes(1);
   });
 });
