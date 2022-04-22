@@ -33,7 +33,7 @@ jobs:
       # The babylon hosts package isn't published yet, so for now we install it
       # from a local checkout so our references work during the build
       - run: npm install ../hosts/packages/amazon-sumerian-hosts-babylon
-        working-directory: "./sumerian-hosts"
+        working-directory: "./open-source-hosts-plugin"
       # END HOSTS SETUP
 
       - run: npm install
