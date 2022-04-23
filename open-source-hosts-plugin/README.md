@@ -8,8 +8,9 @@ This project is licensed under the Apache-2.0 License. See the [LICENSE](LICENSE
 
 ## Installation
 
-1. If you haven't already, download and install the Babylon.JS Editor
-1. Open the Babylon.JS Editor, click Edit > Preferences to open the Preferences tab, click "Plugins" in the upper right corner
+1. If you haven't already, download and install the [Babylon.JS Editor](http://editor.babylonjs.com/)
+1. Open the Babylon.JS Editor, in the upper left corner click Edit > Preferences to open the Preferences tab
+1. Click "Plugins"
 1. Add the plugin to your Babylon.JS Editor:
    - If you are not building the package manually:
      1. Select "Add from NPM..."

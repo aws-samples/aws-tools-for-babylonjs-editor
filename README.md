@@ -37,14 +37,7 @@ AWS Tools for Babylon.JS Editor is divided into multiple packages, and each pack
 
 ### Cloning Repository
 
-1. Create and move into the folder you want to clone the repository to.
-
-```
-mkdir aws-tools-for-babylonjs-editor
-cd aws-tools-for-babylonjs-editor
-```
-
-2. Clone the primary repository
+1. Clone the primary repository
 
 ```
 git clone https://github.com/aws-samples/aws-tools-for-babylonjs-editor.git
