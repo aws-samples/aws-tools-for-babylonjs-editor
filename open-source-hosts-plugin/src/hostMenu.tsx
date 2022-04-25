@@ -3,15 +3,13 @@
 /* eslint-disable import/no-unresolved */
 import {MenuItem} from '@blueprintjs/core';
 import {Editor, SceneExporter, WorkSpace} from 'babylonjs-editor';
-import path from 'path';
 import React from 'react';
 import {SumerianHostAdder} from './hostAdder';
 import {
   AssetsNotFoundError,
   installDependencies,
   prepareWorkspace,
-  RelativeAssetsDir,
-  RelativeWorkspaceScriptsPath,
+  RELATIVE_WORKSPACE_SCRIPT_PATH,
   WorkspaceNotPreparedError,
 } from './workspace';
 
@@ -84,8 +82,10 @@ export default class SumerianAddHostMenu extends React.Component<ISumerianAddHos
         await prepareWorkspace(pluginPath, workSpaceDir);
 
         editor.updateTaskFeedback(addHostProgress, 20, 'Validating assets');
-        const assetsDir = path.join(workSpaceDir, RelativeAssetsDir);
-        const hostAdder = new SumerianHostAdder(assetsDir, selectedCharacter);
+        const hostAdder = new SumerianHostAdder(
+          workSpaceDir,
+          selectedCharacter
+        );
 
         editor.updateTaskFeedback(
           addHostProgress,
@@ -101,7 +101,7 @@ export default class SumerianAddHostMenu extends React.Component<ISumerianAddHos
         );
         hostAdder.attachInitScriptToHost(
           characterAsset,
-          RelativeWorkspaceScriptsPath
+          RELATIVE_WORKSPACE_SCRIPT_PATH
         );
 
         editor.updateTaskFeedback(addHostProgress, 75, 'Updating editor');

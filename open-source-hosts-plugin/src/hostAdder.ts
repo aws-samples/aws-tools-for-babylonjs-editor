@@ -6,10 +6,22 @@
 /* eslint-disable class-methods-use-this */
 
 import {HostObject} from '@amazon-sumerian-hosts/babylon';
-import {AssetContainer, Material, Scene, SceneLoader, Texture} from 'babylonjs';
+import {
+  AssetContainer,
+  Material,
+  Scene,
+  SceneLoader,
+  Skeleton,
+  Texture,
+} from 'babylonjs';
+import {Tools} from 'babylonjs-editor';
 import {existsSync} from 'fs';
 import path from 'path';
-import {validateAssetsPath} from './workspace';
+import {
+  RELATIVE_ASSETS_DIR,
+  RELATIVE_GLTF_ASSETS_DIR,
+  validateAssetsPath,
+} from './workspace';
 
 /**
  * This class is responsible for the process of adding a Sumerian Host to a workspace,
@@ -17,9 +29,11 @@ import {validateAssetsPath} from './workspace';
  */
 class SumerianHostAdder {
   /**
-   * The full path to the assets directory from which the Host files should be loaded
+   * The full path to the GLTF assets directory from which the Host files should be loaded
    */
-  assetsDir: string;
+  gLTFAssetsDir: string;
+
+  workSpaceAssetsDir: string;
 
   /**
    * The configuration object contains paths to the model, textures,
@@ -35,15 +49,16 @@ class SumerianHostAdder {
 
   /**
    *
-   * @param projectDir The absolute path to the assets directory
+   * @param workspaceDir The absolute path to the workspace directory
    * @param characterId The identifier of the Host we wish to add
    */
-  constructor(assetsDir: string, characterId: string) {
-    this.assetsDir = assetsDir;
-    validateAssetsPath(this.assetsDir);
+  constructor(workSpaceDir: string, characterId: string) {
+    this.workSpaceAssetsDir = path.join(workSpaceDir, RELATIVE_ASSETS_DIR);
+    this.gLTFAssetsDir = path.join(workSpaceDir, RELATIVE_GLTF_ASSETS_DIR);
+    validateAssetsPath(this.gLTFAssetsDir);
 
     this.characterConfig = HostObject.getCharacterConfig(
-      this.assetsDir,
+      this.gLTFAssetsDir,
       characterId
     );
 
@@ -71,11 +86,12 @@ class SumerianHostAdder {
     // rename mesh to something human-readable instead of the default '__root__'
     characterAsset.meshes[0].name = this.characterId;
 
-    // the workspace assets dir is intended to be found one directory above the host assets
-    const workspaceAssetsDir = path.join(this.assetsDir, '..');
-
-    this.fixTextures(workspaceAssetsDir, characterAsset.textures as Texture[]);
-    this.fixMaterials(workspaceAssetsDir, characterAsset.materials);
+    this.fixTextures(
+      this.workSpaceAssetsDir,
+      characterAsset.textures as Texture[]
+    );
+    this.fixMaterials(this.workSpaceAssetsDir, characterAsset.materials);
+    this.fixBones(characterAsset.skeletons[0], scene);
 
     characterAsset.addAllToScene();
 
@@ -90,7 +106,7 @@ class SumerianHostAdder {
    * @param workspaceAssetsDir The absolute path to the workspace's assets directory
    * @param textures The array of textures to be fixed
    */
-  private async fixTextures(workspaceAssetsDir: string, textures: Texture[]) {
+  private fixTextures(workspaceAssetsDir: string, textures: Texture[]) {
     textures.forEach((tex: Texture) => {
       if (tex.url && tex.url.startsWith('data:')) {
         const textureDir = tex.url.split(':')[1];
@@ -125,10 +141,7 @@ class SumerianHostAdder {
    * @param workspaceAssetsDir The absolute path to the workspace's assets directory
    * @param materials The array of materials to be fixed
    */
-  private async fixMaterials(
-    workspaceAssetsDir: string,
-    materials: Material[]
-  ) {
+  private fixMaterials(workspaceAssetsDir: string, materials: Material[]) {
     // the model file points to textures stored in a subdirectory called 'textures'
     // this will be the absolute path to that directory
     const textureDirectory = path.join(
@@ -153,6 +166,56 @@ class SumerianHostAdder {
   }
 
   /**
+   * The editor expects certain properties about skeletons and bones to be true before
+   * they will be exported/re-imported correctly
+   * @param skeleton The host skeleton to fix
+   * @param scene The scene the skeleton will be imported into
+   */
+  private fixBones(skeleton: Skeleton | null, scene: Scene) {
+    if (!skeleton) return;
+
+    // The editor will use the skeleton id as an index into an array,
+    // so it needs to be a number - let's find a unique one
+    let id = 0;
+    while (scene.getSkeletonById(id as any)) {
+      id += 1;
+    }
+
+    skeleton.id = id as any;
+    skeleton.bones?.forEach((bone) => {
+      // bone IDs also need to be unique, but can be strings
+      bone.id = Tools.RandomId();
+
+      // the editor expects these properties to be set
+      bone.metadata ??= {};
+      bone.metadata.originalId = bone.id;
+    });
+  }
+
+  /**
+   * This method takes a configuration object of absolute paths to animation files,
+   * and returns the same object where the paths are instead relative to the workspace
+   * directory
+   * @param animUrls
+   * @returns
+   */
+  private convertToRelativeAnimationPaths(animUrls) {
+    const relativeAnimUrls = {};
+    Object.keys(animUrls).forEach((key) => {
+      const relAnimationPath = this.getWorkspaceRelativePath(
+        this.characterConfig.animUrls[key]
+      );
+      relativeAnimUrls[key] = relAnimationPath;
+    });
+    return relativeAnimUrls;
+  }
+
+  private getWorkspaceRelativePath(absolutePath: string) {
+    const workspaceDir = path.join(this.workSpaceAssetsDir, '..');
+    return path.relative(workspaceDir, absolutePath);
+  }
+
+  /**
    * This method configures the character so that the attached script
    * will be invoked at startup by the Babylon engine.
    *
@@ -166,9 +229,11 @@ class SumerianHostAdder {
   ) {
     const rootMesh = characterAsset.meshes[0];
     const metadata = rootMesh.metadata ?? {};
+    const editorMetadata = metadata.editor ?? {};
 
-    metadata.sumerian = {
-      assetsPath: this.assetsDir,
+    // This version of the Sumerian metadata includes absolute paths to local files --
+    // these can be loaded by an application, such as the BabylonJS Editor
+    editorMetadata.sumerian = {
       bindPoseOffsetName: characterAsset.animationGroups[0].name,
       poiConfigPath: this.characterConfig.pointOfInterestConfigUrl,
       gestureConfigPath: this.characterConfig.gestureConfigUrl,
@@ -182,7 +247,28 @@ class SumerianHostAdder {
         language: 'en-US',
       },
     };
+    metadata.editor = editorMetadata;
 
+    // This version of the metadata converts the paths to be relative to the workspace,
+    // so that they can be served by a running server.
+    // First, let's make a deep copy
+    metadata.sumerian = {
+      ...editorMetadata.sumerian,
+      animClipPaths: {...editorMetadata.sumerian.animClipPaths},
+      polyConfig: {...editorMetadata.sumerian.pollyConfig},
+    };
+    metadata.sumerian.animClipPaths = this.convertToRelativeAnimationPaths(
+      this.characterConfig.animUrls
+    );
+    metadata.sumerian.gestureConfigPath = this.getWorkspaceRelativePath(
+      this.characterConfig.gestureConfigUrl
+    );
+    metadata.sumerian.poiConfigPath = this.getWorkspaceRelativePath(
+      this.characterConfig.pointOfInterestConfigUrl
+    );
+
+    // This indicates to the BabylonJS editor to instantiate and run
+    // this script at scene start
     metadata.script = {
       name: scriptPath,
     };

@@ -38,7 +38,8 @@ class AssetsNotFoundError extends Error {
 }
 
 // These are all relative to the package.json file of the respective projects
-const RELATIVE_ASSETS_DIR = 'assets/gLTF/';
+const RELATIVE_ASSETS_DIR = 'assets';
+const RELATIVE_GLTF_ASSETS_DIR = `${RELATIVE_ASSETS_DIR}/gLTF`;
 
 const RELATIVE_PLUGIN_SCRIPT_PATH = 'scripts/sumerianhost.ts';
 
@@ -131,8 +132,8 @@ const prepareWorkspace = async (
     );
 
     // copy asset directory into the workspace, so that they will be bundled relative to the workspace
-    const pluginAssetDir = path.join(pluginDir, RELATIVE_ASSETS_DIR);
-    const workspaceAssetDir = path.join(workSpaceDir, RELATIVE_ASSETS_DIR);
+    const pluginAssetDir = path.join(pluginDir, RELATIVE_GLTF_ASSETS_DIR);
+    const workspaceAssetDir = path.join(workSpaceDir, RELATIVE_GLTF_ASSETS_DIR);
 
     copyPromises.push(copyDirectory(pluginAssetDir, workspaceAssetDir));
 
@@ -168,6 +169,7 @@ export {
   AssetsNotFoundError,
   DependenciesNotInstalledError,
   WorkspaceNotPreparedError,
-  RELATIVE_ASSETS_DIR as RelativeAssetsDir,
-  RELATIVE_WORKSPACE_SCRIPT_PATH as RelativeWorkspaceScriptsPath,
+  RELATIVE_ASSETS_DIR,
+  RELATIVE_GLTF_ASSETS_DIR,
+  RELATIVE_WORKSPACE_SCRIPT_PATH,
 };

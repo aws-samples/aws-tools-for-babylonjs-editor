@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 import {HostObject} from '@amazon-sumerian-hosts/babylon';
 import {Mesh, Scene} from '@babylonjs/core';
-import * as AWS from 'aws-sdk';
+import AWS from 'aws-sdk';
 import {visibleInInspector} from './decorators';
 
 /**
@@ -17,13 +17,6 @@ type SumerianHostMetadata = {
   animClipPaths: Object;
   lookJoint: string;
   pollyConfig: SumerianHostVoiceConfiguration;
-};
-
-type SumerianHostAssets = {
-  characterMesh: Mesh;
-  animClips: Object;
-  gestureConfig: Object;
-  poiConfig: Object;
 };
 
 type SumerianHostVoiceConfiguration = {
@@ -57,7 +50,7 @@ export default class SumerianHost extends Mesh {
    * This method gets called immediately after the constructor
    */
   public async onInitialize(): Promise<any> {
-    const config: SumerianHostMetadata = this.metadata.sumerian;
+    const config: SumerianHostMetadata = this.getMetadata();
 
     // load necessary files - animations, gesture and point of interest configurations
     const bindPoseOffset = this._scene.animationGroups.find(
@@ -74,16 +67,16 @@ export default class SumerianHost extends Mesh {
     const poiConfig = await HostObject.loadJson(config.poiConfigPath);
 
     // set up animations
-    const assets: SumerianHostAssets = {
+    const assets = {
       characterMesh: this,
       animClips,
       gestureConfig,
       poiConfig,
+      bindPoseOffset,
     };
     this.host = HostObject.assembleHost(assets, this._scene);
 
     // have the Host track the scene's active camera
-    // TODO: let camera be set through inspector property
     HostObject.addPointOfInterestTracking(
       this.host,
       this._scene,
@@ -100,6 +93,32 @@ export default class SumerianHost extends Mesh {
       this.cognitoId,
       config.pollyConfig
     );
+  }
+
+  /**
+   * NodeJS defines the global variable 'process' -- as does recent versions of
+   * FireFox, which is why we check the name as well.
+   * We use this to determine whether the code is being run locally from the editor,
+   * or is running in the browser
+   * @returns boolean
+   */
+  private isRunFromEditor(): boolean {
+    return typeof process !== 'undefined' && process.release.name === 'node';
+  }
+
+  /**
+   * If the scene is being run from the editor, this method will return the version of
+   * the configuration that uses local paths.
+   * Otherwise, this method will return the version of the configuration that uses paths
+   * relative to the workspace directory.
+   * @returns {SumerianHostMetadata}
+   */
+  private getMetadata(): SumerianHostMetadata {
+    if (this.isRunFromEditor()) {
+      return this.metadata.editor.sumerian;
+    }
+
+    return this.metadata.sumerian;
   }
 
   private static instantiateAWSCredentials(
