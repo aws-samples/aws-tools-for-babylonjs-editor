@@ -1,11 +1,11 @@
 # AWS Tools for Babylon.JS Editor
 
-AWS Tools for Babylon.JS Editor is a suite of tools and plugins meant to interact with [Babylon.JS Editor](http://editor.babylonjs.com/) by utilizing the capabilities of AWS products.
+AWS Tools for Babylon.JS Editor is a suite of tools meant to interact with [Babylon.JS Editor](http://editor.babylonjs.com/) by utilizing the capabilities of AWS products.
 
 This repository contains a number of useful packages to achieve this:
 
-- [AWS Tools for Babylon.JS Editor: AWS Amplify Publisher Plugin (AWS Tools: AWS Amplify Publisher Plugin)](aws-amplify-publisher-plugin) - A set of tools that enables one-click publishing to AWS Amplify from Babylon.JS Editor.
-- [AWS Tools for Babylon.JS Editor: Open Source Hosts Plugin (AWS Tools: Open Source Hosts Plugin)](open-source-hosts-plugin) - A set of tools that enables BabylonJS Editor workflows with Amazon Sumerian Hosts.
+- [AWS Tools for Babylon.JS Editor: AWS Amplify Publisher Plugin (AWS Tools: AWS Amplify Publisher Plugin)](aws-amplify-publisher-plugin) - A plugin that enables one-click publishing to AWS Amplify from Babylon.JS Editor.
+- [AWS Tools for Babylon.JS Editor: Open Source Hosts Plugin (AWS Tools: Open Source Hosts Plugin)](open-source-hosts-plugin) - A plugin that enables BabylonJS Editor workflows with Amazon Sumerian Hosts.
 
 Each of these packages can be utilized individually to enhance the Babylon.JS Editor in its own way. For more detailed information on the what each package does, click their link above.
 

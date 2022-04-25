@@ -1,6 +1,6 @@
 # AWS Tools for Babylon.JS Editor: Open Source Hosts Plugin
 
-AWS Tools for Babylon.JS Editor: Open Source Hosts Plugin (AWS Tools: Open Source Hosts Plugin) is a set of tools that enables BabylonJS Editor workflows with Amazon Sumerian Hosts.
+AWS Tools for Babylon.JS Editor: Open Source Hosts Plugin (AWS Tools: Open Source Hosts Plugin) is a plugin that enables BabylonJS Editor workflows with Amazon Sumerian Hosts.
 
 ## License
 
@@ -28,7 +28,7 @@ To debug the plugin, press ctrl+alt+I (or cmd+option+I on a mac) to bring up the
 
 ## Usage
 
-TODO: Define specific steps to utilize the tool while inside the editor
+TODO: Define specific steps to utilize the plugin while inside the editor
 
 ## Contributing
 

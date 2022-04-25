@@ -1,6 +1,6 @@
 # AWS Tools for Babylon.JS Editor: AWS Amplify Publisher Plugin
 
-AWS Tools for Babylon.JS Editor: AWS Amplify Publisher Plugin (AWS Tools: Amplify Publisher Plugin) is a set of tools that enables one-click publishing to AWS Amplify from Babylon.JS Editor.
+AWS Tools for Babylon.JS Editor: AWS Amplify Publisher Plugin (AWS Tools: Amplify Publisher Plugin) is a plugin that enables one-click publishing to AWS Amplify from Babylon.JS Editor.
 
 ## License
 
@@ -28,7 +28,7 @@ To debug the plugin, press ctrl+alt+I (or cmd+option+I on a mac) to bring up the
 
 ## Usage
 
-TODO: Define specific steps to utilize the tool while inside the editor
+TODO: Define specific steps to utilize the plugin while inside the editor
 
 ## Contributing
 
