@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 import {HostObject} from '@amazon-sumerian-hosts/babylon';
 import {Mesh, Scene} from '@babylonjs/core';
-import AWS from 'aws-sdk';
+import * as AWS from 'aws-sdk';
 import {visibleInInspector} from './decorators';
 
 /**
@@ -14,7 +14,7 @@ type SumerianHostMetadata = {
   bindPoseOffsetName: string;
   poiConfigPath: string;
   gestureConfigPath: string;
-  animClipPaths: Object;
+  animClipPaths: any;
   lookJoint: string;
   pollyConfig: SumerianHostVoiceConfiguration;
 };
