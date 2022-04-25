@@ -10,42 +10,47 @@ const path = require('path');
 const process = require('process');
 
 // check whether git exists. If not, throw the error and ask customers to install it.
-spawnSync('git', ['--version'], {
-  stdio: ['ignore', 'inherit', 'inherit'],
-});
+const {stdout, stderr} = spawnSync('git', ['--version']);
+if (stderr) {
+  console.error('Git is not available; please check that it is installed');
+  process.exit(1);
+}
+console.log(stdout.toString('utf8'));
 
 const assetsDir = path.join(__dirname, '../assets');
 
 // check whether Assets folder exists.
-if (!existsSync(assetsDir)) {
-  console.log('Now downloading asset files -- this can take up to ten minutes');
-
-  spawnSync(
-    'git',
-    [
-      'clone',
-      '--depth',
-      '1',
-      '--filter=blob:none',
-      '--sparse',
-      'https://github.com/aws-samples/amazon-sumerian-hosts',
-    ],
-    {stdio: ['ignore', 'inherit', 'inherit']}
-  );
-
-  const hostDir = path.join(__dirname, '../amazon-sumerian-hosts');
-  process.chdir(hostDir);
-
-  spawnSync('git', ['sparse-checkout', 'set', 'd1', 'examples/assets']);
-
-  process.chdir('../');
-
-  copySync(
-    path.join(process.cwd(), 'amazon-sumerian-hosts/examples/assets'),
-    assetsDir
-  );
-
-  rmSync(hostDir, {recursive: true, force: true});
-} else {
+if (existsSync(assetsDir)) {
   console.log('Assets have already been downloaded');
+  process.exit(0);
 }
+
+console.log('Now downloading asset files -- this can take up to ten minutes');
+spawnSync(
+  'git',
+  [
+    'clone',
+    '--depth',
+    '1',
+    '--filter=blob:none',
+    '--sparse',
+    'https://github.com/aws-samples/amazon-sumerian-hosts',
+  ],
+  {stdio: ['ignore', 'inherit', 'inherit']}
+);
+
+const hostDir = path.join(__dirname, '../amazon-sumerian-hosts');
+process.chdir(hostDir);
+
+spawnSync('git', ['sparse-checkout', 'set', 'd1', 'examples/assets'], {
+  stdio: ['ignore', 'inherit', 'inherit'],
+});
+
+process.chdir('../');
+
+copySync(
+  path.join(process.cwd(), 'amazon-sumerian-hosts/examples/assets'),
+  assetsDir
+);
+
+rmSync(hostDir, {recursive: true, force: true});
