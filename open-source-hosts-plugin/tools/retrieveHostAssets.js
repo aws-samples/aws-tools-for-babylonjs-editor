@@ -10,7 +10,9 @@ const path = require('path');
 const process = require('process');
 
 // check whether git exists. If not, throw the error and ask customers to install it.
-spawnSync('git', ['--version']);
+spawnSync('git', ['--version'], {
+  stdio: ['ignore', 'inherit', 'inherit'],
+});
 
 const assetsDir = path.join(__dirname, '../assets');
 
@@ -18,14 +20,18 @@ const assetsDir = path.join(__dirname, '../assets');
 if (!existsSync(assetsDir)) {
   console.log('Now downloading asset files -- this can take up to ten minutes');
 
-  spawnSync('git', [
-    'clone',
-    '--depth',
-    '1',
-    '--filter=blob:none',
-    '--sparse',
-    'https://github.com/aws-samples/amazon-sumerian-hosts',
-  ]);
+  spawnSync(
+    'git',
+    [
+      'clone',
+      '--depth',
+      '1',
+      '--filter=blob:none',
+      '--sparse',
+      'https://github.com/aws-samples/amazon-sumerian-hosts',
+    ],
+    {stdio: ['ignore', 'inherit', 'inherit']}
+  );
 
   const hostDir = path.join(__dirname, '../amazon-sumerian-hosts');
   process.chdir(hostDir);
