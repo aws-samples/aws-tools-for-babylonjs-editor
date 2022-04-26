@@ -25,6 +25,11 @@ type SumerianHostVoiceConfiguration = {
   language: string;
 };
 
+// Our Github Actions will replace this with a commit SHA at release time
+// Right now this script is the only runtime asset published by our plugin
+// As we build out more runtime complexity into this plugin, this versioning should move there 
+export const PLUGIN_VERSION = "development";
+
 export default class SumerianHost extends Mesh {
   // Inspector fields
   private static initialCognitoIdValue = 'Fill in';
@@ -166,8 +171,12 @@ export default class SumerianHost extends Mesh {
       // else the Polly SDK's first call to Cognito.getID(...) will fail
       AWS.config.region = region;
 
-      const pollyClient = new AWS.Polly({credentials, region});
-      const pollyPresigner = new AWS.Polly.Presigner({service: pollyClient});
+      const customUserAgent = `AWSToolsForBabylonJSEditor-${PLUGIN_VERSION}`;
+
+      const pollyClient = new AWS.Polly({credentials, region, customUserAgent});
+      const pollyPresigner = new AWS.Polly.Presigner({
+        service: pollyClient,
+      });
 
       await HostObject.initTextToSpeech(pollyClient, pollyPresigner);
 
