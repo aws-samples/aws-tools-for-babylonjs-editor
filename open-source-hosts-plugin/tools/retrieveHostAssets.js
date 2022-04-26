@@ -10,9 +10,11 @@ const path = require('path');
 const process = require('process');
 
 // check whether git exists. If not, throw the error and ask customers to install it.
-const {stdout, stderr, error} = spawnSync('git', ['--version']);
+const {stdout, error} = spawnSync('git', ['--version']);
 if (error) {
-  console.error(`${stderr} Please check that of Git is installed`);
+  console.error(
+    `${error} Please check that Git is installed and set as the environment variable.`
+  );
   process.exit(1);
 }
 console.log(stdout.toString('utf8'));
