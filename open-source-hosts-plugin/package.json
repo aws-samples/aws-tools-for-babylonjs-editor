@@ -28,10 +28,6 @@
         "release": "npm run lint && npm run compile  && npm run test && npm run copy-config"
     },
     "devDependencies": {
-        "@babel/core": "^7.17.5",
-        "@babel/eslint-parser": "^7.17.0",
-        "@babel/preset-react": "^7.16.7",
-        "@babel/preset-typescript": "^7.16.7",
         "@types/jest": "^27.4.1",
         "@typescript-eslint/eslint-plugin": "^5.16.0",
         "@typescript-eslint/parser": "^5.16.0",
