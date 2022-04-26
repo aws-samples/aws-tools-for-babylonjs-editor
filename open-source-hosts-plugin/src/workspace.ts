@@ -3,7 +3,7 @@
 /* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import {exec} from 'child_process';
+import {execFile} from 'child_process';
 import fixPath from 'fix-path';
 import fs from 'fs-extra';
 import os from 'os';
@@ -82,13 +82,13 @@ const installDependencies = async (
 
     const installPromises: any[] = [];
 
-    const execPromise = util.promisify(exec);
+    const execFilePromise = util.promisify(execFile);
 
     // queue up `npm install` commands
     Object.keys(runtimeDependencies).forEach((name) => {
       const version = runtimeDependencies[name];
       installPromises.push(
-        execPromise(`npm install ${name}@${version}`, {
+        execFilePromise('npm', ['install', `${name}@${version}`], {
           cwd: workSpaceDir,
           shell,
         })
