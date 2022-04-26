@@ -10,7 +10,9 @@ import {Editor} from 'babylonjs-editor';
 
 import {AmplifyClient} from '@aws-sdk/client-amplify';
 
-import {Status} from './constants';
+import {Status, PLUGIN_VERSION} from './constants';
+
+
 
 import {
   getAmplifyPublishingPreferences,
@@ -114,7 +116,8 @@ export class AmplifyPublishDialog extends React.Component<
       domainAddress: '',
       error: '',
     };
-    this.client = new AmplifyClient({customUserAgent: 'babylonEditorPlugin'});
+
+    this.client = new AmplifyClient({customUserAgent: `AWSToolsForBabylonJS-${PLUGIN_VERSION}`});
   }
 
   /**

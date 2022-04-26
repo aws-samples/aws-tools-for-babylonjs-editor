@@ -21,5 +21,10 @@ jobs:
           node-version: "16.x"
           registry-url: "https://registry.npmjs.org"
       - run: npm install
+      # Write the commit hash into the constants file, so we get the git hash in the built artifacts
+      # Believe it or not, the following perl statement works on ubuntu/windows/macos
+      - name: "Set version number"
+        run: |
+          perl -i -p -e "s/PLUGIN_VERSION = .*/PLUGIN_VERSION = '${{ github.sha }}';/" ${{ github.workspace }}/aws-amplify-publisher-plugin/src/constants.tsx
       - run: npm run release
       # TODO: Perform CodeQL Analysis here
