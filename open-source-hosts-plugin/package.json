@@ -28,6 +28,7 @@
         "release": "npm run lint && npm run compile  && npm run test && npm run copy-config"
     },
     "devDependencies": {
+        "@types/jest": "^27.4.1",
         "@typescript-eslint/eslint-plugin": "^5.16.0",
         "@typescript-eslint/parser": "^5.16.0",
         "babylonjs-editor": "^4.1.0",
