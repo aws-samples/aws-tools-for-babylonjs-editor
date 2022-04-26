@@ -1,4 +1,4 @@
-\*\* AWS SDK for Javascript; version 2.1120.0 -- https://github.com/aws/aws-sdk-js
+\*\* AWS SDK for Javascript; version 2.1096.0 -- https://github.com/aws/aws-sdk-js
 
 Apache License
 Version 2.0, January 2004
@@ -211,7 +211,7 @@ limitations under the License.
 
 ---
 
-\*\* @aws-sdk/client-amplify; version 3.76.0 -- https://github.com/aws/aws-sdk-js-v3
+\*\* @aws-sdk/client-amplify; version 3.53.0 -- https://github.com/aws/aws-sdk-js-v3
 
          Apache License
                            Version 2.0, January 2004
