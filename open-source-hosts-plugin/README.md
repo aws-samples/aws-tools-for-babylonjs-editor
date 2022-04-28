@@ -28,7 +28,34 @@ To debug the plugin, press ctrl+alt+I (or cmd+option+I on a mac) to bring up the
 
 ## Usage
 
-TODO: Define specific steps to utilize the plugin while inside the editor
+### Add a host to the scene
+
+Locate `Open Source Hosts Tools` in the editor toolbars. When you expand "Add Hosts", you will see a submenu of possible host types, each with their own unique model. Select one to spawn it at the origin of your scene. This will also copy the necessary assets and install the requisite dependencies into your project workspace.
+
+The script `sumerianhost.ts` will be added into your project source; the file will load and configure animations at runtime, such as blinking, lip sync, gestures, etc. The host will track the main camera by default; the configuration of this behavior can be found in this script.
+
+### Configure webpack
+
+The `@amazon-sumerian-hosts` library needs to be configured to use the same instance of BabylonJS as the rest of the project. To do this, add the following to the `module.exports.resolve` block in the `webpack.config.js` for the project:
+
+```
+		modules: ['node_modules'],
+		alias: {
+			'@babylonjs/core': path.resolve('./node_modules/@babylonjs/core')
+		}
+```
+
+### Configure the text to speech feature
+
+Select the host in the editor and find the `Script` node in the Inspector column. There is a field under `Exported Values` called `Cognito Identity Pool ID` that will need to be filled in with the ARN of a Cognito Identity Pool that has access to Polly.
+
+The `SumerianHost` class has a `speak` utility method that can be used to trigger the host to speak. To make use of it, you may need to get a reference to the SumerianHost node:
+
+```
+      // change name to whatever the name of the added host was
+      const host = scene.getNodeByName('Cristine') as SumerianHost;
+      host.speak("Hello world!");
+```
 
 ## Contributing
 
@@ -48,4 +75,8 @@ TODO: Define specific steps to utilize the plugin while inside the editor
 
 ### Testing
 
-TODO: Fill out
+Ensure unit tests run locally: `npm run test`
+
+Additionally, ensure that the plugin loads in the editor, and that a host can be added to the open project without errors.
+
+Unit tests will be run automatically across Windows/Linux/MacOSX on every submitted PR, but we currently do not yet have integration tests.
