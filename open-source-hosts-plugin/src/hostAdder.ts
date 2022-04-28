@@ -196,8 +196,10 @@ class SumerianHostAdder {
    * This method takes a configuration object of absolute paths to animation files,
    * and returns the same object where the paths are instead relative to the workspace
    * directory
-   * @param animUrls
-   * @returns
+   * @param {Object} animUrls An object where the key-value pairs point to absolute paths
+   *                          to animation files
+   * @returns {Object} An object where the key-value pairs point to relative paths
+   *                   to animation files
    */
   private convertToRelativeAnimationPaths(animUrls) {
     const relativeAnimUrls = {};
@@ -255,7 +257,7 @@ class SumerianHostAdder {
     metadata.sumerian = {
       ...editorMetadata.sumerian,
       animClipPaths: {...editorMetadata.sumerian.animClipPaths},
-      polyConfig: {...editorMetadata.sumerian.pollyConfig},
+      pollyConfig: {...editorMetadata.sumerian.pollyConfig},
     };
     metadata.sumerian.animClipPaths = this.convertToRelativeAnimationPaths(
       this.characterConfig.animUrls
