@@ -103,7 +103,11 @@ export default class SumerianHost extends Mesh {
    * @returns boolean
    */
   private isRunFromEditor(): boolean {
-    return typeof process !== 'undefined' && process.release.name === 'node';
+    return (
+      typeof process !== 'undefined' &&
+      process &&
+      process.release.name === 'node'
+    );
   }
 
   /**
