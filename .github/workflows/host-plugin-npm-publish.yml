@@ -1,0 +1,28 @@
+name: Open Source Host NPM Publish
+
+on:
+  release:
+    types: [created]
+
+defaults:
+  run:
+    working-directory: "./open-source-hosts-plugin"
+    
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    # Setup .npmrc file to publish to npm
+    - uses: actions/setup-node@v3
+      with:
+        node-version: '16.x'
+        registry-url: 'https://registry.npmjs.org'
+    - run: npm install
+    - name: "Set version number"
+      run: |
+        perl -i -p -e "s/PLUGIN_VERSION = .*/PLUGIN_VERSION = '${{ github.sha }}';/" ${{ github.workspace }}/open-source-hosts-plugin/scripts/sumerianhost.ts
+    - run: npm run release
+    - run: npm publish --access public
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
