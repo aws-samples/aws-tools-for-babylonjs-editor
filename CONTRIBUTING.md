@@ -93,7 +93,7 @@ AWS Tools for Babylon.JS Editor is divided into multiple packages, where the roo
 - [AWS Tools: Open Source Hosts Plugin](open-source-hosts-plugin/CONTRIBUTING#contributor-workflow)
 
 
-### Contributing via Pull Requests
+### Submitting Pull Requests
 
 Contributions via pull requests are much appreciated. Before sending us a pull request, please ensure that:
 
