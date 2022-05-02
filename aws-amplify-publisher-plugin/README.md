@@ -29,20 +29,3 @@ To debug the plugin, press ctrl+alt+I (or cmd+option+I on a mac) to bring up the
 ## Usage
 
 TODO: Define specific steps to utilize the plugin while inside the editor
-
-## Contributing
-
-### Prerequisites
-
-- Refer to all [prerequisites](https://github.com/aws-samples/aws-tools-for-babylonjs-editor/README.md#prerequisites) from the primary repository
-
-### Building
-
-1. Install the plugin dependencies defined in `package.json`:
-   `npm install`
-2. Compile the Typescript code into Javascript
-   `npm run compile`
-
-### Testing
-
-TODO: Fill out
