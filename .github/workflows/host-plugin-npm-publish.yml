@@ -3,9 +3,12 @@ name: Open Source Host NPM Publish
 on:
   release:
     types: [created]
-jobs:
+
+defaults:
   run:
     working-directory: "./open-source-hosts-plugin"
+    
+jobs:
   build:
     runs-on: ubuntu-latest
     steps:

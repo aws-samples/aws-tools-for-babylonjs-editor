@@ -3,9 +3,12 @@ name: AWS Amplify Publisher NPM Publish
 on:
   release:
     types: [created]
-jobs:
+
+defaults:
   run:
     working-directory: "./aws-amplify-publisher-plugin"
+    
+jobs:
   build:
     runs-on: ubuntu-latest
     steps:
