@@ -27,8 +27,8 @@ type SumerianHostVoiceConfiguration = {
 
 // Our Github Actions will replace this with a commit SHA at release time
 // Right now this script is the only runtime asset published by our plugin
-// As we build out more runtime complexity into this plugin, this versioning should move there 
-export const PLUGIN_VERSION = "development";
+// As we build out more runtime complexity into this plugin, this versioning should move there
+export const PLUGIN_VERSION = 'development';
 
 export default class SumerianHost extends Mesh {
   // Inspector fields
