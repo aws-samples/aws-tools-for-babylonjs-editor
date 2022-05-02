@@ -19,6 +19,9 @@ jobs:
         node-version: '16.x'
         registry-url: 'https://registry.npmjs.org'
     - run: npm install
+    - name: "Set version number"
+      run: |
+        perl -i -p -e "s/PLUGIN_VERSION = .*/PLUGIN_VERSION = '${{ github.sha }}';/" ${{ github.workspace }}/open-source-hosts-plugin/scripts/sumerianhost.ts
     - run: npm publish --access public
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
