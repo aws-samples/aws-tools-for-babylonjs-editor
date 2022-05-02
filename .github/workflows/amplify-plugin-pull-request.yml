@@ -15,7 +15,8 @@ jobs:
       fail-fast: false # continue testing on all platforms even if one fails
     steps:
       - uses: actions/checkout@v3
-      # TODO: Add CodeQL setup here
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v1
       - uses: actions/setup-node@v1
         with:
           node-version: "16.x"
@@ -27,4 +28,6 @@ jobs:
         run: |
           perl -i -p -e "s/PLUGIN_VERSION = .*/PLUGIN_VERSION = '${{ github.sha }}';/" ${{ github.workspace }}/aws-amplify-publisher-plugin/src/constants.tsx
       - run: npm run release
-      # TODO: Perform CodeQL Analysis here
+      - name: Perform CodeQL Analysis
+        if: matrix.os == 'ubuntu-latest' # we only need to run this check on one platform
+        uses: github/codeql-action/analyze@v1
