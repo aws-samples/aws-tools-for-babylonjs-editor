@@ -12,7 +12,8 @@ jobs:
       fail-fast: false # continue testing on all platforms even if one fails
     steps:
       - uses: actions/checkout@v3
-      # TODO: Add CodeQL setup here
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v1
 
       # We depend on the Hosts package, but it is not published yet
       # So for now let's build it here too and link it like we do on local workstation
@@ -45,4 +46,6 @@ jobs:
         working-directory: "./open-source-hosts-plugin"
       - run: npm run release
         working-directory: "./open-source-hosts-plugin"
-      # TODO: Perform CodeQL Analysis here
+      - name: Perform CodeQL Analysis
+        if: matrix.os == 'ubuntu-latest' # we only need to run this check on one platform
+        uses: github/codeql-action/analyze@v1
