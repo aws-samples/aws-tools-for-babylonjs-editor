@@ -1,6 +1,7 @@
 {
     "runtimeDependencies": {
         "@amazon-sumerian-hosts/babylon": "^2",
-        "aws-sdk": "^2.1096.0"
+        "aws-sdk": "^2.1096.0",
+        "util": "^0.12.4"
     }
 }
