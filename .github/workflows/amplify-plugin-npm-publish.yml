@@ -22,6 +22,7 @@ jobs:
     - name: "Set version number"
       run: |
         perl -i -p -e "s/PLUGIN_VERSION = .*/PLUGIN_VERSION = '${{ github.sha }}';/" ${{ github.workspace }}/aws-amplify-publisher-plugin/src/constants.tsx
+    - run: npm run release
     - run: npm publish --access public
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
