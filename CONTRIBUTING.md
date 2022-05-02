@@ -10,22 +10,6 @@ Please read through this document before editing the code base, submitting any i
 - [Contributor Workflow](#contributor-workflow)
 - [Maintainer Workflow](#maintainer-workflow)
 
-
-## Reporting Bugs/Feature Requests
-
-We welcome you to use the GitHub issue tracker to report bugs or suggest features.
-# Contributing Guidelines and Workflow
-
-Thank you for your interest in contributing to our project. Whether it's a bug report, new feature, correction, or additional documentation, we greatly value feedback and contributions from our community.
-
-Please read through this document before editing the code base, submitting any issues, or submitting pull requests to ensure we have all the necessary information to effectively respond to your bug report or contribution.
-
-**In this document:**
-
-- [Contributor Guidelines](#contributor-guidelines)
-- [Contributor Workflow](#contributor-workflow)
-- [Maintainer Workflow](#maintainer-workflow)
-
 ---
 
 ## [Contributor Guidelines](#contributor-guidelines)
@@ -97,7 +81,7 @@ AWS Tools for Babylon.JS Editor is divided into multiple packages, where the roo
 
 Contributions via pull requests are much appreciated. Before sending us a pull request, please ensure that:
 
-1. You are working against the latest source on the *mainline* branch.
+1. You are working against the latest source on the *main* branch.
 2. You check existing open and recently merged pull requests to make sure someone else hasn't addressed the problem already.
 3. You open an issue to discuss any significant work - we would hate for your time to be wasted.
 
@@ -110,7 +94,7 @@ To send us a pull request, please:
 5. Send us a pull request, answering any default questions in the pull request interface.
 6. Pay attention to any automated CI failures reported in the pull request, and stay involved in the conversation.
 
-GitHub provides additional document on [forking a repository](https://help.github.com/articles/fork-a-repo/) and [creating a pull request](https://help.github.com/articles/creating-a-pull-request/).
+GitHub provides additional documentation on [forking a repository](https://help.github.com/articles/fork-a-repo/) and [creating a pull request](https://help.github.com/articles/creating-a-pull-request/).
 
 ---
 
@@ -123,7 +107,7 @@ All packages are all published and distributed via the [npmjs.com](https://www.n
 1. Update the package.json for each package with new version number using [semantic versioning](https://semver.org/). All packages should always share the same version number.
 2. Create a new release using the GitHub.com console. See [previous releases](https://github.com/aws-samples/aws-tools-for-babylonjs-editor/releases) for reference.
 	1. In the release creation form, create a new repository tag labeling it using the package version number prefixed with "v". *Example: "v2.1.3"*
-	2. Set the target of the release to the `mainline` branch.
+	2. Set the target of the release to the `main` branch.
 	3. Set the title of the release to match the tag name. *Example: "v2.1.3"*
 	4. In the release description field, add a heading in the form **"AWS Tools for Babylon.JS Editor Release *{version number}* - *{Reason for Release}*"**. Example: *"AWS Tools for Babylon.JS Editor Release 1.3.1 - Bug Fixes"*
 	5. Append all significant changes as bullet points.

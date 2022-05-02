@@ -22,14 +22,12 @@ Thank you for your interest in contributing to our project. This document covers
 
 ### Testing
 
-Ensure unit tests run locally: `npm run test`
-
-Additionally, ensure that the plugin loads in the editor, and that a host can be added to the open project without errors.
-
 #### Unit Tests
+
+You can run the unit test suite by using the command: `npm run test`
 
 Unit tests will be run automatically across Windows/Linux/MacOSX on every submitted PR.
 
 #### Integration Tests
 
-TODO: Fill out when available
+Manually ensure that the plugin loads in the editor, and that a host can be added to the open project without errors.

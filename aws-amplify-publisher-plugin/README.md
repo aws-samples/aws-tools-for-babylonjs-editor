@@ -8,6 +8,7 @@ This project is licensed under the Apache-2.0 License. See the [LICENSE](LICENSE
 
 ## Installation
 
+1. Ensure you have set your [AWS Credentials properly](https://docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide/configuring-the-jssdk.html)
 1. If you haven't already, download and install the [Babylon.JS Editor](http://editor.babylonjs.com/)
 1. Open the Babylon.JS Editor, in the upper left corner click Edit > Preferences to open the Preferences tab
 1. Click "Plugins"
