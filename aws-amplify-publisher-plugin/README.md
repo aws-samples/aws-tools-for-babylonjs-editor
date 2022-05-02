@@ -8,6 +8,7 @@ This project is licensed under the Apache-2.0 License. See the [LICENSE](LICENSE
 
 ## Installation
 
+1. Ensure you have set your [AWS Credentials properly](https://docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide/configuring-the-jssdk.html)
 1. If you haven't already, download and install the [Babylon.JS Editor](http://editor.babylonjs.com/)
 1. Open the Babylon.JS Editor, in the upper left corner click Edit > Preferences to open the Preferences tab
 1. Click "Plugins"
@@ -29,20 +30,3 @@ To debug the plugin, press ctrl+alt+I (or cmd+option+I on a mac) to bring up the
 ## Usage
 
 TODO: Define specific steps to utilize the plugin while inside the editor
-
-## Contributing
-
-### Prerequisites
-
-- Refer to all [prerequisites](https://github.com/aws-samples/aws-tools-for-babylonjs-editor/README.md#prerequisites) from the primary repository
-
-### Building
-
-1. Install the plugin dependencies defined in `package.json`:
-   `npm install`
-2. Compile the Typescript code into Javascript
-   `npm run compile`
-
-### Testing
-
-TODO: Fill out
