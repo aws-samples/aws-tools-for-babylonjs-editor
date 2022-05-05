@@ -30,6 +30,8 @@ To debug the plugin, press ctrl+alt+I (or cmd+option+I on a mac) to bring up the
 
 ### Add a host to the scene
 
+**Note:** Please disable the SSAO (Scene -> Inspector -> Rendering -> Disable SSAO 2) to fix the lighting issue until this problem gets fixed by BabylonJS Editor.
+
 Locate `Open Source Hosts Tools` in the editor toolbars. When you expand "Add Hosts", you will see a submenu of possible host types, each with their own unique model. Select one to spawn it at the origin of your scene. This will also copy the necessary assets and install the requisite dependencies into your project workspace.
 
 The script `sumerianhost.ts` will be added into your project source; the file will load and configure animations at runtime, such as blinking, lip sync, gestures, etc. The host will track the main camera by default; the configuration of this behavior can be found in this script.
