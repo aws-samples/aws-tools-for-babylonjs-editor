@@ -3,7 +3,6 @@
 
 import fs from 'fs-extra';
 import archiver from 'archiver-promise';
-import path from 'path';
 // eslint-disable-next-line import/no-unresolved
 import {WorkSpace} from 'babylonjs-editor';
 /**
@@ -50,52 +49,18 @@ async function zipFile(
 
 /**
  * Compress the files needed to be host on the server.
- * @param folderPrefix the prefix of the folder's name.
  * @returns A Promise object that resolves the zip file path.
- * @throws An error if it fails to get WorkSpace DirPath or it does not exist.
  */
-export async function zipArtifacts(folderPrefix: string): Promise<string> {
-  let tmpDir: string | undefined;
+export async function zipArtifacts(): Promise<string> {
   const workSpaceDirPath = WorkSpace.DirPath;
-  try {
-    if (workSpaceDirPath !== null && fs.existsSync(workSpaceDirPath)) {
-      const now = new Date();
-      tmpDir = fs.mkdtempSync(
-        path.join(workSpaceDirPath, `${folderPrefix}${now.getTime()}`)
-      );
-
-      // get the scenes folder from the Editor project directory
-      const tmpDirScenes = path.join(tmpDir, 'scenes');
-      const scenesFolder = path.join(workSpaceDirPath, 'scenes');
-      fs.copySync(scenesFolder, tmpDirScenes);
-
-      // get the dist folder from the Editor project directory
-      const tmpDirDist = path.join(tmpDir, 'dist');
-      const distFolder = path.join(workSpaceDirPath, 'dist');
-      fs.copySync(distFolder, tmpDirDist);
-
-      // get the index.html from the Editor project directory
-      const tempIndexHTML = path.join(tmpDir, 'index.html');
-      const indexHTML = path.join(workSpaceDirPath, 'index.html');
-      fs.copyFileSync(indexHTML, tempIndexHTML);
-    } else {
-      throw new Error(
-        `Cannot get WorkSpace directory ${workSpaceDirPath}, or it does not exist.`
-      );
-    }
-    const zipFilePath = `${tmpDir}.zip`;
-    return await zipFile(tmpDir, zipFilePath);
-  } finally {
-    try {
-      if (tmpDir) {
-        fs.rmdirSync(tmpDir, {recursive: true});
-      }
-    } catch (error) {
-      console.error(
-        `An error has occurred while removing the temp folder at ${tmpDir}. Please remove it manually. ${error}`
-      );
-    }
+  console.log(workSpaceDirPath);
+  if (workSpaceDirPath == null || !fs.existsSync(workSpaceDirPath)) {
+    throw new Error(
+      `Cannot get WorkSpace directory ${workSpaceDirPath}, or it does not exist.`
+    );
   }
+  const zipFilePath = `${workSpaceDirPath}.zip`;
+  return zipFile(workSpaceDirPath, zipFilePath);
 }
 
 /**

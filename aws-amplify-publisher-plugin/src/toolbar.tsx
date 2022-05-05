@@ -75,6 +75,7 @@ export class AmplifyPublisherToolbar extends React.Component<
             text="AWS Amplify Hosting"
             onClick={this._handlePublishClick}
             shouldDismissPopover={false}
+            key="amplify-hosting-menu"
           />
         </Menu>
         <AmplifyPublishDialog

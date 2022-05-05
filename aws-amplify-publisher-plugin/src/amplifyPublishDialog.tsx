@@ -6,13 +6,11 @@ import React from 'react';
 import {Dialog} from '@blueprintjs/core';
 import fs from 'fs-extra';
 // eslint-disable-next-line import/no-unresolved
-import {Editor} from 'babylonjs-editor';
+import {Editor, SceneExporter} from 'babylonjs-editor';
 
 import {AmplifyClient} from '@aws-sdk/client-amplify';
 
 import {Status, PLUGIN_VERSION} from './constants';
-
-
 
 import {
   getAmplifyPublishingPreferences,
@@ -117,7 +115,9 @@ export class AmplifyPublishDialog extends React.Component<
       error: '',
     };
 
-    this.client = new AmplifyClient({customUserAgent: `AWSToolsForBabylonJS-${PLUGIN_VERSION}`});
+    this.client = new AmplifyClient({
+      customUserAgent: `AWSToolsForBabylonJS-${PLUGIN_VERSION}`,
+    });
   }
 
   /**
@@ -194,7 +194,9 @@ export class AmplifyPublishDialog extends React.Component<
     this.setState({status: Status.Progress});
 
     try {
-      artifactsPath = await zipArtifacts('tmpDir');
+      await SceneExporter.ExportFinalScene(this.props.editor);
+
+      artifactsPath = await zipArtifacts();
 
       // create an Amplify deployment
       const {jobId, zipUploadUrl} = await createAmplifyDeployment(
