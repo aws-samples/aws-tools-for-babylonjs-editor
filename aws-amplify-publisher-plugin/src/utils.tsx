@@ -53,7 +53,6 @@ async function zipFile(
  */
 export async function zipArtifacts(): Promise<string> {
   const workSpaceDirPath = WorkSpace.DirPath;
-  console.log(workSpaceDirPath);
   if (workSpaceDirPath == null || !fs.existsSync(workSpaceDirPath)) {
     throw new Error(
       `Cannot get WorkSpace directory ${workSpaceDirPath}, or it does not exist.`
