@@ -30,6 +30,8 @@ To debug the plugin, press ctrl+alt+I (or cmd+option+I on a mac) to bring up the
 
 ### Add a host to the scene
 
+**Note:** There is a known issue that causes undesirable shadowing artifacts when you use the Host characters. This is due to an issue in Babylon.js Editor v4.2.0 with Babylon.js v4.2.1. Until this bug is fixed, you can disable the Screen Space Ambient Occlusion(SSAO) post-processing effect to avoid the issue. Please use the following steps: 1. Click **Scene** in the Graph List. 2. In the Inspector window, select **Rendering** tab. 3. Toggle the **SSAO 2** off.
+
 Locate `Open Source Hosts Tools` in the editor toolbars. When you expand "Add Hosts", you will see a submenu of possible host types, each with their own unique model. Select one to spawn it at the origin of your scene. This will also copy the necessary assets and install the requisite dependencies into your project workspace.
 
 The script `sumerianhost.ts` will be added into your project source; the file will load and configure animations at runtime, such as blinking, lip sync, gestures, etc. The host will track the main camera by default; the configuration of this behavior can be found in this script.
