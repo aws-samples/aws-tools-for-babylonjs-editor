@@ -13,4 +13,4 @@ export enum Status {
 }
 
 // Our Github Actions will replace this with a commit SHA at release time
-export const PLUGIN_VERSION = "development";
+export const PLUGIN_VERSION = 'development';
