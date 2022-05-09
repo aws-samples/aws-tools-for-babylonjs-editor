@@ -14,29 +14,9 @@ jobs:
       - uses: actions/checkout@v3
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v1
-
-      # We depend on the Hosts package, but it is not published yet
-      # So for now let's build it here too and link it like we do on local workstation
-      # From here down to the 'END HOSTS SETUP' token below, we can delete once that package is published
-      - uses: actions/checkout@v3
-        with:
-          repository: "aws-samples/amazon-sumerian-hosts"
-          ref: "mainline2.0"
-          path: "hosts"
-      - uses: actions/setup-node@v1
-        with:
-          node-version: "16.x"
-          registry-url: "https://registry.npmjs.org"
-      - run: npm install
-        working-directory: "./hosts"
-      - run: npm run build
-        working-directory: "./hosts"
-      # The babylon hosts package isn't published yet, so for now we install it
-      # from a local checkout so our references work during the build
-      - run: npm install ../hosts/packages/amazon-sumerian-hosts-babylon
-        working-directory: "./open-source-hosts-plugin"
-      # END HOSTS SETUP
-
+        with: 
+          config-file: ./.github/codeql/codeql-config.yml
+          debug: true
       # Write the commit hash into the script file, so we get the git hash in the built artifacts
       # Believe it or not, the following perl statement works on ubuntu/windows/macos
       - name: "Set version number"
