@@ -19,7 +19,6 @@ jobs:
         uses: github/codeql-action/init@v1
         with: 
           config-file: ./.github/codeql/codeql-config.yml
-          debug: true
       - uses: actions/setup-node@v1
         with:
           node-version: "16.x"

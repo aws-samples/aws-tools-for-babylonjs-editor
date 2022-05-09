@@ -16,7 +16,6 @@ jobs:
         uses: github/codeql-action/init@v1
         with: 
           config-file: ./.github/codeql/codeql-config.yml
-          debug: true
       # Write the commit hash into the script file, so we get the git hash in the built artifacts
       # Believe it or not, the following perl statement works on ubuntu/windows/macos
       - name: "Set version number"
