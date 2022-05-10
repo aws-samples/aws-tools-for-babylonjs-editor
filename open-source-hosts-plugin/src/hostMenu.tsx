@@ -92,7 +92,7 @@ export default class SumerianAddHostMenu extends React.Component<ISumerianAddHos
           25,
           'Adding Sumerian Host to scene'
         );
-        const characterAsset = await hostAdder.addToScene(currentScene);
+        const characterAsset = await hostAdder.addToScene(currentScene, editor);
 
         editor.updateTaskFeedback(
           addHostProgress,
