@@ -1,0 +1,82 @@
+{
+	"tags": "modified",
+	"ellipsoid": [
+		0.5,
+		1,
+		0.5
+	],
+	"ellipsoidOffset": [
+		0,
+		0,
+		0
+	],
+	"checkCollisions": false,
+	"applyGravity": false,
+	"rotation": [
+		0.14400873959133342,
+		-4.152381726862046,
+		0
+	],
+	"speed": 0.1,
+	"position": [
+		-3.853118178933855,
+		1.265373375965023,
+		2.167350666943626
+	],
+	"upVector": [
+		0,
+		1,
+		0
+	],
+	"fov": 0.8,
+	"minZ": 1,
+	"maxZ": 5000,
+	"inertia": 0.9,
+	"mode": 0,
+	"layerMask": 268435455,
+	"fovMode": 0,
+	"cameraRigMode": 0,
+	"name": "camera",
+	"id": "05e93a47-ec25-41ad-a1df-16f279c32246",
+	"state": "",
+	"metadata": {
+		"script": {
+			"name": "None"
+		}
+	},
+	"type": "UniversalCamera",
+	"inputsmgr": {
+		"FreeCameraKeyboardMoveInput": {
+			"tags": null,
+			"keysUp": [
+				87
+			],
+			"keysUpward": [
+				33
+			],
+			"keysDown": [
+				83
+			],
+			"keysDownward": [
+				34
+			],
+			"keysLeft": [
+				65
+			],
+			"keysRight": [
+				68
+			]
+		},
+		"FreeCameraMouseInput": {
+			"tags": null,
+			"buttons": [
+				0,
+				1,
+				2
+			],
+			"angularSensibility": 2000
+		}
+	},
+	"animations": [],
+	"ranges": []
+}

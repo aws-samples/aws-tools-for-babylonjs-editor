@@ -64,6 +64,7 @@ describe('workspace', () => {
       expect(testValidateAsset).toThrowError(
         'Sumerian Host assets could not be found at '
       );
+
       expect(testValidateAsset).toThrowError(AssetsNotFoundError);
     });
   });

@@ -1,0 +1,60 @@
+{
+	"tags": null,
+	"position": [
+		-1.1641532182693481e-10,
+		-3.581509828567505,
+		3.3652584552764893
+	],
+	"rotation": [
+		0,
+		0,
+		0
+	],
+	"rotationQuaternion": [
+		0.08128610253334045,
+		0,
+		0,
+		0.9966908097267151
+	],
+	"scaling": [
+		1,
+		0.9999999403953552,
+		1.0000001192092896
+	],
+	"billboardMode": 0,
+	"scalingDeterminant": 1,
+	"infiniteDistance": false,
+	"ignoreNonUniformScaling": false,
+	"reIntegrateRotationIntoRotationQuaternion": false,
+	"name": "char:def_c_tongueA",
+	"id": "ca2b5ea9-07ed-4d21-a31a-ee9eceb1fa3e",
+	"state": "",
+	"metadata": {
+		"gltf": {
+			"pointers": [
+				"/nodes/35"
+			]
+		}
+	},
+	"type": "TransformNode",
+	"parentId": "725bf0b7-69cc-4479-b3df-495b110577ee",
+	"localMatrix": {
+		"0": 1,
+		"1": 0,
+		"2": 0,
+		"3": 0,
+		"4": 0,
+		"5": 1,
+		"6": 0,
+		"7": 0,
+		"8": 0,
+		"9": 0,
+		"10": 1,
+		"11": 0,
+		"12": 0,
+		"13": 0,
+		"14": 0,
+		"15": 1
+	},
+	"isEnabled": true
+}

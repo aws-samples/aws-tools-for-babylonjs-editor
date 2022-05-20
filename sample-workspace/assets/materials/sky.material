@@ -1,0 +1,46 @@
+{
+	"tags": null,
+	"luminance": 1,
+	"turbidity": 10,
+	"rayleigh": 2,
+	"mieCoefficient": 0.005,
+	"mieDirectionalG": 0.8,
+	"distance": 500,
+	"inclination": 0.2,
+	"azimuth": 0.25,
+	"sunPosition": [
+		3.061616997868383e-14,
+		404.5084971874737,
+		-293.8926261462366
+	],
+	"useSunPosition": false,
+	"cameraOffset": {
+		"x": 0,
+		"y": 0,
+		"z": 0
+	},
+	"id": "b2346078-7465-4c63-8877-44b542584898",
+	"name": "sky",
+	"checkReadyOnEveryCall": false,
+	"checkReadyOnlyOnce": false,
+	"state": "",
+	"alpha": 1,
+	"backFaceCulling": true,
+	"sideOrientation": 1,
+	"alphaMode": 2,
+	"_needDepthPrePass": false,
+	"disableDepthWrite": false,
+	"disableColorWrite": false,
+	"forceDepthWrite": false,
+	"depthFunction": 0,
+	"separateCullingPass": false,
+	"fogEnabled": true,
+	"pointSize": 1,
+	"zOffset": 0,
+	"pointsCloud": false,
+	"fillMode": 0,
+	"customType": "BABYLON.SkyMaterial",
+	"metadata": {
+		"editorPath": "materials/sky.material"
+	}
+}

@@ -1,0 +1,53 @@
+{
+	"tags": null,
+	"url": "gLTF/characters/adult_female/cristine/char!pants_mat (Base Color).png.jpeg",
+	"uOffset": 0,
+	"vOffset": 0,
+	"uScale": 1,
+	"vScale": 1,
+	"uAng": 0,
+	"vAng": 0,
+	"wAng": 0,
+	"uRotationCenter": 0.5,
+	"vRotationCenter": 0.5,
+	"wRotationCenter": 0.5,
+	"homogeneousRotationInUVTransform": false,
+	"isBlocking": true,
+	"name": "gLTF/characters/adult_female/cristine/char!pants_mat (Base Color).png.jpeg",
+	"metadata": {
+		"gltf": {
+			"pointers": [
+				"/materials/7/pbrMetallicRoughness/baseColorTexture"
+			],
+			"editorDone": true
+		},
+		"editorDone": true,
+		"ktx2CompressedTextures": {
+			"isUsingCompressedTexture": false
+		},
+		"editorName": "char!pants_mat (Base Color).png.jpeg",
+		"editorId": "74719622-f652-4b4a-b2ad-1b5fb1f263e5"
+	},
+	"hasAlpha": false,
+	"getAlphaFromRGB": false,
+	"level": 1,
+	"coordinatesIndex": 0,
+	"coordinatesMode": 0,
+	"wrapU": 1,
+	"wrapV": 1,
+	"wrapR": 1,
+	"anisotropicFilteringLevel": 4,
+	"isCube": false,
+	"is3D": false,
+	"is2DArray": false,
+	"gammaSpace": true,
+	"invertZ": false,
+	"lodLevelInAlpha": false,
+	"lodGenerationOffset": 0,
+	"lodGenerationScale": 0,
+	"linearSpecularLOD": false,
+	"isRenderTarget": false,
+	"animations": [],
+	"invertY": false,
+	"samplingMode": 3
+}

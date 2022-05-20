@@ -1,0 +1,60 @@
+{
+	"tags": null,
+	"position": [
+		6.045101642608643,
+		-0.000013589861737273168,
+		0.0000171661376953125
+	],
+	"rotation": [
+		0,
+		0,
+		0
+	],
+	"rotationQuaternion": [
+		3.725291186640334e-9,
+		-7.216450718854702e-16,
+		-1.0430812125150624e-7,
+		1
+	],
+	"scaling": [
+		1.0000001192092896,
+		1.0000001192092896,
+		1
+	],
+	"billboardMode": 0,
+	"scalingDeterminant": 1,
+	"infiniteDistance": false,
+	"ignoreNonUniformScaling": false,
+	"reIntegrateRotationIntoRotationQuaternion": false,
+	"name": "char:def_l_forearm1",
+	"id": "8eb1e227-b274-4895-b683-2fad3f8efdc8",
+	"state": "",
+	"metadata": {
+		"gltf": {
+			"pointers": [
+				"/nodes/2"
+			]
+		}
+	},
+	"type": "TransformNode",
+	"parentId": "9a05ba3f-d884-4a26-b397-171bfe9b6b21",
+	"localMatrix": {
+		"0": 1,
+		"1": 0,
+		"2": 0,
+		"3": 0,
+		"4": 0,
+		"5": 1,
+		"6": 0,
+		"7": 0,
+		"8": 0,
+		"9": 0,
+		"10": 1,
+		"11": 0,
+		"12": 0,
+		"13": 0,
+		"14": 0,
+		"15": 1
+	},
+	"isEnabled": true
+}

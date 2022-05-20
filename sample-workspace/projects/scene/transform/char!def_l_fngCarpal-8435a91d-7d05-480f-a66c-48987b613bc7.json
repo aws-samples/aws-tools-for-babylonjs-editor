@@ -1,0 +1,60 @@
+{
+	"tags": null,
+	"position": [
+		2.3509817123413086,
+		0.12909573316574097,
+		0.23730461299419403
+	],
+	"rotation": [
+		0,
+		0,
+		0
+	],
+	"rotationQuaternion": [
+		-0.06540337949991226,
+		1.624297851776646e-7,
+		-5.207725166656019e-7,
+		0.9978589415550232
+	],
+	"scaling": [
+		1.0000001192092896,
+		1.000000238418579,
+		1
+	],
+	"billboardMode": 0,
+	"scalingDeterminant": 1,
+	"infiniteDistance": false,
+	"ignoreNonUniformScaling": false,
+	"reIntegrateRotationIntoRotationQuaternion": false,
+	"name": "char:def_l_fngCarpal",
+	"id": "8435a91d-7d05-480f-a66c-48987b613bc7",
+	"state": "",
+	"metadata": {
+		"gltf": {
+			"pointers": [
+				"/nodes/19"
+			]
+		}
+	},
+	"type": "TransformNode",
+	"parentId": "16ca7d00-cf73-4700-961d-b4d9280aa03d",
+	"localMatrix": {
+		"0": 1,
+		"1": 0,
+		"2": 0,
+		"3": 0,
+		"4": 0,
+		"5": 1,
+		"6": 0,
+		"7": 0,
+		"8": 0,
+		"9": 0,
+		"10": 1,
+		"11": 0,
+		"12": 0,
+		"13": 0,
+		"14": 0,
+		"15": 1
+	},
+	"isEnabled": true
+}

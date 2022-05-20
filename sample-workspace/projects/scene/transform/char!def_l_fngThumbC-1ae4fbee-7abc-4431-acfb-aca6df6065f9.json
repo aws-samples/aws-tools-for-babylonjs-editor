@@ -1,0 +1,60 @@
+{
+	"tags": null,
+	"position": [
+		2.982414722442627,
+		0.00007603714766446501,
+		0.000008642672582936939
+	],
+	"rotation": [
+		0,
+		0,
+		0
+	],
+	"rotationQuaternion": [
+		-1.8161355797019496e-7,
+		2.1421545426392186e-8,
+		0.0006022033630870283,
+		0.9999998211860657
+	],
+	"scaling": [
+		0.9999998807907104,
+		0.9999997019767761,
+		0.9999999403953552
+	],
+	"billboardMode": 0,
+	"scalingDeterminant": 1,
+	"infiniteDistance": false,
+	"ignoreNonUniformScaling": false,
+	"reIntegrateRotationIntoRotationQuaternion": false,
+	"name": "char:def_l_fngThumbC",
+	"id": "1ae4fbee-7abc-4431-acfb-aca6df6065f9",
+	"state": "",
+	"metadata": {
+		"gltf": {
+			"pointers": [
+				"/nodes/4"
+			]
+		}
+	},
+	"type": "TransformNode",
+	"parentId": "e4c19966-5a7b-4964-923b-e5f36bbed9bc",
+	"localMatrix": {
+		"0": 1,
+		"1": 0,
+		"2": 0,
+		"3": 0,
+		"4": 0,
+		"5": 1,
+		"6": 0,
+		"7": 0,
+		"8": 0,
+		"9": 0,
+		"10": 1,
+		"11": 0,
+		"12": 0,
+		"13": 0,
+		"14": 0,
+		"15": 1
+	},
+	"isEnabled": true
+}
