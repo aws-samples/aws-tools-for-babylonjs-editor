@@ -42,7 +42,7 @@ export default class SumerianHost extends Mesh {
   private cognitoId: string;
 
   // Class members
-  private host;
+  public host;
 
   /**
    * Override constructor.
@@ -191,6 +191,7 @@ export default class SumerianHost extends Mesh {
       console.error(
         'Invalid cognito identity pool ID - did you set it on the script node on the Sumerian Host?'
       );
+      alert('Invalid cognito identity pool ID - did you set it on the script node on the Sumerian Host?');
     }
   }
 
