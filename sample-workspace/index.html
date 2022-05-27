@@ -6,6 +6,13 @@
 
     <script src="./dist/bundle.js" type="text/javascript"></script>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Serif:ital,opsz,wght@1,8..144,200;1,8..144,500&family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
     <style rel="stylesheet" type="text/css">
       html,
       body {
@@ -28,8 +35,6 @@
       /* The following styles have been added to the default index.html file
         used by the standard Babylon.JS Editor project template. These styles
         help define the user interface of this demo application. */
-
-      @import url("https://fonts.googleapis.com/css2?family=Roboto+Serif:ital,wght@1,200;1,500&family=Roboto:wght@400;700&display=swap");
 
       select,
       textarea,
@@ -201,10 +206,7 @@
         font-size: 16px;
         line-height: 130%;
         color: #fff;
-      }
-
-      #uiScreens * {
-        pointer-events: inherit;
+        pointer-events: none;
       }
 
       .screen {
@@ -212,7 +214,7 @@
       }
 
       .screen * {
-        pointer-events: inherit;
+        pointer-events: auto;
       }
 
       .modal.screen {

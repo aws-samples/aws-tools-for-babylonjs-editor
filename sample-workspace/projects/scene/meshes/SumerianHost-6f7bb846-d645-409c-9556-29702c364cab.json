@@ -3,7 +3,7 @@
 		{
 			"name": "SumerianHost",
 			"id": "6f7bb846-d645-409c-9556-29702c364cab",
-			"uniqueId": 153,
+			"uniqueId": 155,
 			"type": "Mesh",
 			"position": [
 				0,
@@ -12,9 +12,9 @@
 			],
 			"rotationQuaternion": [
 				0,
+				1,
 				0,
-				0,
-				1
+				6.123233995736766e-17
 			],
 			"scaling": [
 				1,
@@ -39,7 +39,7 @@
 				"14": 0,
 				"15": 1
 			},
-			"isEnabled": false,
+			"isEnabled": true,
 			"isVisible": true,
 			"infiniteDistance": false,
 			"pickable": true,
@@ -122,7 +122,7 @@
 					"properties": {
 						"cognitoId": {
 							"type": "string",
-							"value": ""
+							"value": "us-west-2:3eb8a906-3615-4894-8b5f-582420fe8e49"
 						}
 					}
 				},

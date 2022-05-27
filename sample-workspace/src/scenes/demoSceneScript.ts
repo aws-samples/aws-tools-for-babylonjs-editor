@@ -53,11 +53,11 @@ export default class DemoSceneScript extends Node {
      * Called when the scene starts.
      */
     public onStart(): void {
-        console.log(this.hostNode);
-        this.initUi();
-        // this.initConversationManagement();
-        this.initChatbot();
-        this.acquireMicrophoneAccess();
+        setTimeout(() => {
+            this.initChatbot();
+            this.initUi();
+            this.acquireMicrophoneAccess();
+        }, 5 * 1000);
     }
 
     protected initUi(): void {
@@ -76,8 +76,14 @@ export default class DemoSceneScript extends Node {
     protected initConversationManagement(): void {
         // Use talk button events to start and stop recording.
         const talkButton = document.getElementById('talkButton');
-        talkButton.onmousedown = () => this.lex.beginVoiceRecording();
-        talkButton.onmouseup = () => this.lex.endVoiceRecording();
+        talkButton.onmousedown = () => {
+            console.log('Begin recording');
+            this.lex.beginVoiceRecording();
+        };
+        talkButton.onmouseup = () => {
+            console.log('End recording');
+            this.lex.endVoiceRecording();
+        };
 
         // Use events dispatched by the LexFeature to present helpful user messages.
         const {EVENTS} = AwsFeatures.LexFeature;
@@ -93,6 +99,18 @@ export default class DemoSceneScript extends Node {
     }
 
     protected initChatbot(): void {
+        // ===== Configure the AWS SDK =====
+        // const cognitoIdentityPoolId = 'us-west-2:3eb8a906-3615-4894-8b5f-582420fe8e49';
+        // AWS.config.region = cognitoIdentityPoolId.split(':')[0];
+        // AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+        //     IdentityPoolId: cognitoIdentityPoolId,
+        // });
+
+        AWS.config.region = SumerianHost.awsRegion;
+        AWS.config.credentials = SumerianHost.awsCredentials;
+
+        console.log(`Lex is using ${SumerianHost.awsRegion}`);
+
         // Initialize chatbot access. If you'd like to use this demo with a different chatbot, just change the
         // botName and botAlias values below.
         const lexClient = new AWS.LexRuntime();
@@ -107,6 +125,8 @@ export default class DemoSceneScript extends Node {
         this.lex.listenTo(EVENTS.lexResponseReady, (response) =>
             this.handleLexResponse(response)
         );
+
+        this.initConversationManagement();
     }
 
     /**
@@ -138,7 +158,7 @@ export default class DemoSceneScript extends Node {
         this.displaySpeechInputTranscript(response.inputTranscript);
 
         // Have the host speak the response from Lex.
-        // this.host.TextToSpeechFeature.play(response.message);
+        this.hostNode.host.TextToSpeechFeature.play(response.message);
     }
 
     protected displaySpeechInputTranscript(text) {

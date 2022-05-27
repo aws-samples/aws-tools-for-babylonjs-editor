@@ -44,6 +44,10 @@ export default class SumerianHost extends Mesh {
   // Class members
   public host;
 
+  public static awsCredentials: any;
+
+  public static awsRegion: string;
+
   /**
    * Override constructor.
    * @warn do not fill.
@@ -166,6 +170,10 @@ export default class SumerianHost extends Mesh {
       const region = SumerianHost.getRegionFromCognitoIdentityPoolID(
         cognitoIdentityPoolId
       );
+
+      // TEMP: Debugging
+      SumerianHost.awsCredentials = credentials;
+      SumerianHost.awsRegion = region;
 
       // setting this global config is necessary -
       // else the Polly SDK's first call to Cognito.getID(...) will fail
