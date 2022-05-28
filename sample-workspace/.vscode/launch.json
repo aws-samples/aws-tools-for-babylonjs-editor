@@ -2,6 +2,13 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Launch to Chrome",
+            "url": "http://localhost:1338",
+            "request": "launch",
+            "type": "chrome",
+            "webRoot": "${workspaceFolder}"
+        },
+        {
             "name": "Attach Editor",
             "type": "chrome",
             "request": "attach",

@@ -3,7 +3,8 @@
 import {HostObject} from '@amazon-sumerian-hosts/babylon';
 import {Mesh, Scene} from '@babylonjs/core';
 import * as AWS from 'aws-sdk';
-import {visibleInInspector} from './decorators';
+import { fromScene, visibleInInspector } from './decorators';
+import IAwsConnector from "./IAwsConnector";
 
 /**
  * This is the script attached to a Sumerian Host, which loads animations
@@ -33,6 +34,9 @@ export const PLUGIN_VERSION = 'development';
 export default class SumerianHost extends Mesh {
   // Inspector fields
   private static initialCognitoIdValue = 'Fill in';
+
+  @fromScene('AWS Connector')
+  public awsConnector: IAwsConnector;
 
   @visibleInInspector(
     'string',
@@ -102,6 +106,10 @@ export default class SumerianHost extends Mesh {
       this.cognitoId,
       config.pollyConfig
     );
+  }
+
+  public onStart(): void {
+    
   }
 
   /**
