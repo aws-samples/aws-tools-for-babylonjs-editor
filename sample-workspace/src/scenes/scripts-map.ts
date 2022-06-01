@@ -10,6 +10,7 @@ export interface ISceneScriptMap extends ScriptMap {
 	"src/scenes/domUtils.ts": any;
 	"src/scenes/IAwsConnector.ts": any;
 	"src/scenes/scene/gui.ts": any;
+	"src/scenes/SceneScript.ts": any;
 	"src/scenes/sumerianhost.ts": any;
 }
 
@@ -23,5 +24,6 @@ export const scriptsMap: ISceneScriptMap = {
 	"src/scenes/domUtils.ts": require("./domUtils"),
 	"src/scenes/IAwsConnector.ts": require("./IAwsConnector"),
 	"src/scenes/scene/gui.ts": require("./scene/gui"),
+	"src/scenes/SceneScript.ts": require("./SceneScript"),
 	"src/scenes/sumerianhost.ts": require("./sumerianhost"),
 }

@@ -25,7 +25,7 @@
 	"state": "",
 	"metadata": {
 		"script": {
-			"name": "src/scenes/demoSceneScript.ts"
+			"name": "src/scenes/SceneScript.ts"
 		}
 	},
 	"type": "TransformNode",

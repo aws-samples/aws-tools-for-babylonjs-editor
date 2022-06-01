@@ -59,7 +59,7 @@ export default class SumerianHost extends Mesh {
   @visibleInInspector('string', 'Polly Engine ("standard" or "neural")', 'neural')
   public pollyEngine: string;
     
-  @fromScene('AWS Connector')
+  @fromScene('AWSConnector')
   public awsConnector: IAwsConnector;
 
   /**

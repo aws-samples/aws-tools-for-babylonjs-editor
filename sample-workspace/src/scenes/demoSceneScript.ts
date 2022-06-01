@@ -27,15 +27,13 @@ import IAwsConnector from "./IAwsConnector";
  */
 export default class DemoSceneScript extends Node {
 
-    @fromScene('AWS Connector')
+    @fromScene('AWSConnector')
     public awsConnector: IAwsConnector;
     
     @fromScene('SumerianHost')
     protected hostNode: SumerianHost;
 
-    // TODO: Use a proper type once the Sumerian Hosts library supports 
-    // TypeScript definitions for the LexFeature class.
-    protected lex: any;
+    protected lex: AwsFeatures.LexFeature;
 
     protected messageContainerEl: HTMLElement;
 
@@ -57,11 +55,11 @@ export default class DemoSceneScript extends Node {
      * Called when the scene starts.
      */
     public onStart(): void {
-        setTimeout(() => {
+        this.hostNode.onHostReadyObserver.add(() => {
             this.initChatbot();
             this.initUi();
             this.acquireMicrophoneAccess();
-        }, 5 * 1000);
+        });
     }
 
     protected initUi(): void {
@@ -81,11 +79,9 @@ export default class DemoSceneScript extends Node {
         // Use talk button events to start and stop recording.
         const talkButton = document.getElementById('talkButton');
         talkButton.onmousedown = () => {
-            console.log('Begin recording');
             this.lex.beginVoiceRecording();
         };
         talkButton.onmouseup = () => {
-            console.log('End recording');
             this.lex.endVoiceRecording();
         };
 
@@ -103,13 +99,6 @@ export default class DemoSceneScript extends Node {
     }
 
     protected initChatbot(): void {
-        // ===== Configure the AWS SDK =====
-        // const cognitoIdentityPoolId = 'us-west-2:3eb8a906-3615-4894-8b5f-582420fe8e49';
-        // AWS.config.region = cognitoIdentityPoolId.split(':')[0];
-        // AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-        //     IdentityPoolId: cognitoIdentityPoolId,
-        // });
-
         AWS.config.region = this.awsConnector.getRegion();
         AWS.config.credentials = this.awsConnector.getCredentials();
 
@@ -187,7 +176,6 @@ export default class DemoSceneScript extends Node {
 
         try {
             await this.lex.enableMicInput();
-            console.log('Microphone ready');
             showUiScreen('startScreen');
         } catch (e) {
             // The user or browser denied mic access. Display appropriate messaging
@@ -198,23 +186,6 @@ export default class DemoSceneScript extends Node {
                 showUiScreen('micDisabledScreen');
             }
         }
-    }
-
-    // ===== Keyboard Input ======
-
-    @onKeyboardEvent("z", KeyboardEventTypes.KEYDOWN)
-    protected keyDownHandler(info: KeyboardInfo): void {
-        this.acquireMicrophoneAccess();
-    }
-
-    @onKeyboardEvent(" ", KeyboardEventTypes.KEYDOWN)
-    protected talkKeyDownHandler(info: KeyboardInfo): void {
-        
-    }
-
-    @onKeyboardEvent(" ", KeyboardEventTypes.KEYUP)
-    protected talkKeyUpHandler(info: KeyboardInfo): void {
-        console.log('End listening.');
     }
 }
 
