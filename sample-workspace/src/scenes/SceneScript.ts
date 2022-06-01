@@ -7,36 +7,33 @@ import { showUiScreen } from './domUtils';
 import IAwsConnector from "./IAwsConnector";
 
 /**
- * This represents a script that is attached to a node in the editor.
- * Available nodes are:
- *      - Meshes
- *      - Lights
- *      - Cameas
- *      - Transform nodes
- * 
- * You can extend the desired class according to the node type.
- * Example:
- *      export default class MyMesh extends Mesh {
- *          public onUpdate(): void {
- *              this.rotation.y += 0.04;
- *          }
- *      }
- * The function "onInitialize" is called immediately after the constructor is called.
- * The functions "onStart" and "onUpdate" are called automatically.
+ * This script defines the main logic of our demo.
  */
 export default class SceneScript extends Node {
 
+    // ==== Inspectable parameters ====
+
+    /**
+     * The name of the Lex chatbot to use.
+     */
     @visibleInInspector('string', 'Bot Name', 'BookTrip')
     public botName = '';
 
+    /**
+     * The version alias of the Lex chatbot to use.
+     */
     @visibleInInspector('string', 'Bot Alias', 'Dev')
     public botAlias = '';
         
+    // ==== Injected property values ====
+
     @fromScene('AWSConnector')
     public awsConnector: IAwsConnector;
     
     @fromScene('SumerianHost')
-    protected hostNode: SumerianHostScript;
+    protected hostScript: SumerianHostScript;
+
+    // ==== Class properties ====
 
     protected lex: AwsFeatures.LexFeature;
 
@@ -51,14 +48,22 @@ export default class SceneScript extends Node {
     // @ts-ignore ignoring the super call as we don't want to re-init
     protected constructor() { }
 
+    /**
+     * Called automatically when the scene starts, after inspectable property
+     * values are ready.
+     */
     public onStart(): void {
-        this.hostNode.onHostReadyObserver.add(() => {
+        this.hostScript.onHostReadyObserver.add(() => {
             this.initChatbot();
+            this.initConversationManagement();
             this.initUi();
             this.acquireMicrophoneAccess();
         });
     }
 
+    /**
+     * Initializes UI and user interactions.
+     */
     protected initUi(): void {
         const isRunningInViewport = window.location.host === '';
         if (isRunningInViewport) {
@@ -70,9 +75,7 @@ export default class SceneScript extends Node {
         // Set up interactions for UI buttons.
         document.getElementById('startButton').onclick = () => this.startMainExperience();
         document.getElementById('enableMicButton').onclick = () => this.acquireMicrophoneAccess();
-    }
 
-    protected initConversationManagement(): void {
         // Use talk button events to start and stop recording.
         const talkButton = document.getElementById('talkButton');
         talkButton.onmousedown = () => {
@@ -82,6 +85,15 @@ export default class SceneScript extends Node {
             this.lex.endVoiceRecording();
         };
 
+        // Create convenience references to DOM elements.
+        this.messageContainerEl = document.getElementById('userMessageContainer');
+        this.transcriptTextEl = document.getElementById('transcriptText');
+    }
+
+    /**
+     * Defines logic that provides user feedback during the conversation flow.
+     */
+    protected initConversationManagement(): void {
         // Use events dispatched by the LexFeature to present helpful user messages.
         const {EVENTS} = AwsFeatures.LexFeature;
         this.lex.listenTo(EVENTS.lexResponseReady, response =>
@@ -89,12 +101,11 @@ export default class SceneScript extends Node {
         );
         this.lex.listenTo(EVENTS.recordBegin, () => this.hideUserMessages());
         this.lex.listenTo(EVENTS.recordEnd, () => this.displayProcessingMessage());
-
-        // Create convenience references to DOM elements.
-        this.messageContainerEl = document.getElementById('userMessageContainer');
-        this.transcriptTextEl = document.getElementById('transcriptText');
     }
 
+    /**
+     * Initializes the Lex chatbot.
+     */
     protected initChatbot(): void {
         AWS.config.region = this.awsConnector.getRegion();
         AWS.config.credentials = this.awsConnector.getCredentials();
@@ -108,13 +119,6 @@ export default class SceneScript extends Node {
         };
 
         this.lex = new AwsFeatures.LexFeature(lexClient, botConfig);
-
-        const {EVENTS} = AwsFeatures.LexFeature;
-        this.lex.listenTo(EVENTS.lexResponseReady, (response) =>
-            this.handleLexResponse(response)
-        );
-
-        this.initConversationManagement();
     }
 
     /**
@@ -124,7 +128,7 @@ export default class SceneScript extends Node {
         showUiScreen('chatbotUiScreen');
 
         // Speak a greeting to the user.
-        this.hostNode.host.TextToSpeechFeature.play(
+        this.hostScript.host.TextToSpeechFeature.play(
             `Hello. How can I help?  You can say things like, "I'd like to rent a car," or, "Help me book a hotel".`
         );
     }
@@ -146,7 +150,7 @@ export default class SceneScript extends Node {
         this.displaySpeechInputTranscript(response.inputTranscript);
 
         // Have the host speak the response from Lex.
-        this.hostNode.host.TextToSpeechFeature.play(response.message);
+        this.hostScript.host.TextToSpeechFeature.play(response.message);
     }
 
     protected displaySpeechInputTranscript(text) {
