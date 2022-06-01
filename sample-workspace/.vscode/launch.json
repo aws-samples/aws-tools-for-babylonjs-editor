@@ -15,6 +15,14 @@
             "webRoot": "${workspaceFolder}",
             "sourceMaps": true,
             "port": 8315
+        },
+        {
+            "name": "Attach to My Browser",
+            "type": "chrome",
+            "request": "attach",
+            "webRoot": "${workspaceFolder}",
+            "sourceMaps": true,
+            "port": 1338
         }
     ]
 }

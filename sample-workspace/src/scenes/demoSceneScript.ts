@@ -5,6 +5,7 @@ import SumerianHost from "./sumerianhost";
 import * as AWS from 'aws-sdk';
 import { aws as AwsFeatures } from '@amazon-sumerian-hosts/babylon';
 import { showUiScreen } from './domUtils';
+import IAwsConnector from "./IAwsConnector";
 
 /**
  * This represents a script that is attached to a node in the editor.
@@ -26,6 +27,9 @@ import { showUiScreen } from './domUtils';
  */
 export default class DemoSceneScript extends Node {
 
+    @fromScene('AWS Connector')
+    public awsConnector: IAwsConnector;
+    
     @fromScene('SumerianHost')
     protected hostNode: SumerianHost;
 
@@ -106,10 +110,8 @@ export default class DemoSceneScript extends Node {
         //     IdentityPoolId: cognitoIdentityPoolId,
         // });
 
-        AWS.config.region = SumerianHost.awsRegion;
-        AWS.config.credentials = SumerianHost.awsCredentials;
-
-        console.log(`Lex is using ${SumerianHost.awsRegion}`);
+        AWS.config.region = this.awsConnector.getRegion();
+        AWS.config.credentials = this.awsConnector.getCredentials();
 
         // Initialize chatbot access. If you'd like to use this demo with a different chatbot, just change the
         // botName and botAlias values below.

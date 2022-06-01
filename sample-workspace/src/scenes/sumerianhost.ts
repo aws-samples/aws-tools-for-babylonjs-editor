@@ -1,14 +1,29 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
-import {HostObject} from '@amazon-sumerian-hosts/babylon';
-import {Mesh, Scene} from '@babylonjs/core';
+import { HostObject } from '@amazon-sumerian-hosts/babylon';
+import { Mesh, Observable } from '@babylonjs/core';
 import * as AWS from 'aws-sdk';
 import { fromScene, visibleInInspector } from './decorators';
 import IAwsConnector from "./IAwsConnector";
 
 /**
- * This is the script attached to a Sumerian Host, which loads animations
- * and configures several features at runtime.
+ * This is the script attached to a Sumerian Host. You will typically not need
+ * to edit this script. Instead, other scripts in your scene should interact 
+ * with the host via the `SumerianHost.host` property which provides a
+ * HostObject instance.
+ * 
+ * Host initialization is asynchronous. Your scripts can subscribe to the
+ * SumerianHost.onHostReadyObserver to be notified when the host is fully
+ * initialized and ready for use.
+ * 
+ * Example:
+ * _In your own script..._
+ ```
+// Assume hostNode references a SumerianHost instance.
+hostNode.onHostReadyObserver.add(() -> {
+  hostNode.host.TextToSpeechFeature.play("Hello, world!");
+});
+ ```
  */
 
 type SumerianHostMetadata = {
@@ -32,25 +47,47 @@ type SumerianHostVoiceConfiguration = {
 export const PLUGIN_VERSION = 'development';
 
 export default class SumerianHost extends Mesh {
-  // Inspector fields
-  private static initialCognitoIdValue = 'Fill in';
 
+  // ==== Inspector parameters ====
+
+  @visibleInInspector('string', 'Voice ID', 'Joanna')
+  public pollyVoiceId: string;
+
+  @visibleInInspector('string', 'Language ID', 'en-US')
+  public pollyLanguageId: string;
+
+  @visibleInInspector('string', 'Polly Engine ("standard" or "neural")', 'neural')
+  public pollyEngine: string;
+    
   @fromScene('AWS Connector')
   public awsConnector: IAwsConnector;
 
-  @visibleInInspector(
-    'string',
-    'Cognito Identity Pool ID',
-    SumerianHost.initialCognitoIdValue
-  )
-  private cognitoId: string;
+  /**
+   * Observer which signals when the SumerianHost.host instance is fully
+   * initialized and ready for use.
+   */
+  public onHostReadyObserver: Observable<any> = new Observable();
 
-  // Class members
-  public host;
-
-  public static awsCredentials: any;
-
-  public static awsRegion: string;
+  /**
+   * Provides access to the APIs that control host functionality, namely:
+   * 
+   * Text-to-speech functions, available via `SumerianHost.host.TextToSpeechFeature`.
+   * See [TextToSpeechFeature API documentation](https://aws-samples.github.io/amazon-sumerian-hosts/babylonjs_TextToSpeechFeature.html).
+   * 
+   * Point-of-interest tracking, available via `SumerianHost.host.PointOfInterestFeature`.
+   * See [PointOfInterestFeature API documentation](https://aws-samples.github.io/amazon-sumerian-hosts/babylonjs_PointOfInterestFeature.html).
+   * 
+   * Gesture functions, available via `SumerianHost.host.GestureFeature`.
+   * See [GestureFeature API documentation](https://aws-samples.github.io/amazon-sumerian-hosts/core_GestureFeature.html)
+   * 
+   * Developer note: This property is typed as "HostObject | any" because 
+   * the HostObject's TypeScript definition doesn't include some properties 
+   * that are dynamically added to the object at runtime such as
+   * HostObject.TextToSpeechFeature and others. The "any" designation
+   * prevents the TypeScript compiler from reporting errors when accessing those
+   * dynamic properties.
+   */
+  public host: HostObject | any;
 
   /**
    * Override constructor.
@@ -60,24 +97,30 @@ export default class SumerianHost extends Mesh {
   protected constructor() {}
 
   /**
-   * This method gets called immediately after the constructor
+   * This method gets called immediately after the constructor.
    */
-  public async onInitialize(): Promise<any> {
+  public async onInitialize(): Promise<void> {
     const config: SumerianHostMetadata = this.getMetadata();
+    const poiConfig = await HostObject.loadJson(config.poiConfigPath);
 
-    // load necessary files - animations, gesture and point of interest configurations
+    await this.initHostCharacter(config, poiConfig);
+    this.initPointOfInterestTracking(poiConfig, config.lookJoint);
+    await this.initTextToSpeech();
+    this.onHostReady();
+  }
+
+  protected async initHostCharacter(config: any, poiConfig: any, ): Promise<void> {
     const bindPoseOffset = this._scene.animationGroups.find(
       (animGroup) => animGroup.name === config.bindPoseOffsetName
     );
 
     const animClips = await HostObject.loadCharacterAnimations(
-      this._scene,
+      this.getScene(),
       this,
       bindPoseOffset,
       config.animClipPaths
     );
     const gestureConfig = await HostObject.loadJson(config.gestureConfigPath);
-    const poiConfig = await HostObject.loadJson(config.poiConfigPath);
 
     // set up animations
     const assets = {
@@ -87,44 +130,55 @@ export default class SumerianHost extends Mesh {
       poiConfig,
       bindPoseOffset,
     };
-    this.host = HostObject.assembleHost(assets, this._scene);
+    this.host = HostObject.assembleHost(assets, this.getScene());
+  }
 
+  protected initPointOfInterestTracking(poiConfig, lookJoint): void {
     // have the Host track the scene's active camera
     HostObject.addPointOfInterestTracking(
       this.host,
       this._scene,
       poiConfig,
-      config.lookJoint
+      lookJoint
     );
-    this.host.PointOfInterestFeature.setTarget(this._scene.activeCamera);
 
-    // if you wish to specify a different voice for the host,
-    // override the pollyConfig defined in the metadata
-    await SumerianHost.instantiateTextToSpeech(
-      this.host,
-      this._scene,
-      this.cognitoId,
-      config.pollyConfig
-    );
+    // Track the active camera by default.
+    const camera = this.getScene().activeCamera;
+    this.host.PointOfInterestFeature.setTarget(camera);
   }
 
-  public onStart(): void {
-    
+  protected async initTextToSpeech(): Promise<void> {
+    const region = this.awsConnector.getRegion();
+    const credentials = this.awsConnector.getCredentials();
+
+    // setting this global config is necessary -
+    // else the Polly SDK's first call to Cognito.getID(...) will fail
+    AWS.config.region = region;
+
+    const customUserAgent = `AWSToolsForBabylonJSEditor-${PLUGIN_VERSION}`;
+
+    const pollyClient = new AWS.Polly({credentials, region, customUserAgent});
+    const pollyPresigner = new AWS.Polly.Presigner({
+      service: pollyClient,
+    });
+
+    await HostObject.initTextToSpeech(pollyClient, pollyPresigner);
+
+    HostObject.addTextToSpeech(
+      this.host,
+      this.getScene(),
+      this.pollyVoiceId,
+      this.pollyEngine,
+      this.pollyLanguageId
+    );
   }
 
   /**
-   * NodeJS defines the global variable 'process' -- as does recent versions of
-   * FireFox, which is why we check the name as well.
-   * We use this to determine whether the code is being run locally from the editor,
-   * or is running in the browser
-   * @returns boolean
+   * Call this method to signal when the host has finished its asynchronous
+   * initialization and is ready for use.
    */
-  private isRunFromEditor(): boolean {
-    return (
-      typeof process !== 'undefined' &&
-      process &&
-      process.release.name === 'node'
-    );
+  protected onHostReady(): void {
+    this.onHostReadyObserver.notifyObservers(this);
   }
 
   /**
@@ -134,7 +188,7 @@ export default class SumerianHost extends Mesh {
    * relative to the workspace directory.
    * @returns {SumerianHostMetadata}
    */
-  private getMetadata(): SumerianHostMetadata {
+  protected getMetadata(): SumerianHostMetadata {
     if (this.isRunFromEditor()) {
       return this.metadata.editor.sumerian;
     }
@@ -142,76 +196,19 @@ export default class SumerianHost extends Mesh {
     return this.metadata.sumerian;
   }
 
-  private static instantiateAWSCredentials(
-    cognitoIdentityPoolId: string
-  ): AWS.CognitoIdentityCredentials {
-    return new AWS.CognitoIdentityCredentials({
-      IdentityPoolId: cognitoIdentityPoolId,
-    });
-  }
-
-  private static getRegionFromCognitoIdentityPoolID(
-    cognitoIdentityPoolId: string
-  ): string {
-    return cognitoIdentityPoolId.split(':')[0];
-  }
-
-  private static validateCognitoIdentityPoolId(
-    cognitoIdentityPoolId: string
-  ): boolean {
+  /**
+   * NodeJS defines the global variable 'process' -- as does recent versions of
+   * FireFox, which is why we check the name as well.
+   * We use this to determine whether the code is being run locally from the editor,
+   * or is running in the browser
+   * @returns boolean
+   */
+  protected isRunFromEditor(): boolean {
     return (
-      cognitoIdentityPoolId &&
-      cognitoIdentityPoolId !== SumerianHost.initialCognitoIdValue
+      typeof process !== 'undefined' &&
+      process &&
+      process.release.name === 'node'
     );
   }
 
-  private static async instantiateTextToSpeech(
-    host,
-    scene: Scene,
-    cognitoIdentityPoolId: string,
-    pollyConfig: SumerianHostVoiceConfiguration
-  ): Promise<void> {
-    if (SumerianHost.validateCognitoIdentityPoolId(cognitoIdentityPoolId)) {
-      const credentials = SumerianHost.instantiateAWSCredentials(
-        cognitoIdentityPoolId
-      );
-      const region = SumerianHost.getRegionFromCognitoIdentityPoolID(
-        cognitoIdentityPoolId
-      );
-
-      // TEMP: Debugging
-      SumerianHost.awsCredentials = credentials;
-      SumerianHost.awsRegion = region;
-
-      // setting this global config is necessary -
-      // else the Polly SDK's first call to Cognito.getID(...) will fail
-      AWS.config.region = region;
-
-      const customUserAgent = `AWSToolsForBabylonJSEditor-${PLUGIN_VERSION}`;
-
-      const pollyClient = new AWS.Polly({credentials, region, customUserAgent});
-      const pollyPresigner = new AWS.Polly.Presigner({
-        service: pollyClient,
-      });
-
-      await HostObject.initTextToSpeech(pollyClient, pollyPresigner);
-
-      HostObject.addTextToSpeech(
-        host,
-        scene,
-        pollyConfig.voice,
-        pollyConfig.engine,
-        pollyConfig.language
-      );
-    } else {
-      console.error(
-        'Invalid cognito identity pool ID - did you set it on the script node on the Sumerian Host?'
-      );
-      alert('Invalid cognito identity pool ID - did you set it on the script node on the Sumerian Host?');
-    }
-  }
-
-  public speak(speech: string): void {
-    this.host.TextToSpeechFeature.play(speech);
-  }
 }
