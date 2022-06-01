@@ -27,6 +27,12 @@ import IAwsConnector from "./IAwsConnector";
  */
 export default class SceneScript extends Node {
 
+    @visibleInInspector('string', 'Bot Name', 'BookTrip')
+    public botName = '';
+
+    @visibleInInspector('string', 'Bot Alias', 'Dev')
+    public botAlias = '';
+        
     @fromScene('AWSConnector')
     public awsConnector: IAwsConnector;
     
@@ -98,8 +104,8 @@ export default class SceneScript extends Node {
         // botName and botAlias values below.
         const lexClient = new AWS.LexRuntime();
         const botConfig = {
-            botName: 'BookTrip',
-            botAlias: 'Dev',
+            botName: this.botName,
+            botAlias: this.botAlias
         };
 
         this.lex = new AwsFeatures.LexFeature(lexClient, botConfig);

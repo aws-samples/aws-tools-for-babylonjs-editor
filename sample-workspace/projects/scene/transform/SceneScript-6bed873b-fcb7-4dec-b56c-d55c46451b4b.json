@@ -25,7 +25,17 @@
 	"state": "",
 	"metadata": {
 		"script": {
-			"name": "src/scenes/SceneScript.ts"
+			"name": "src/scenes/SceneScript.ts",
+			"properties": {
+				"botName": {
+					"type": "string",
+					"value": "BookTrip"
+				},
+				"botAlias": {
+					"type": "string",
+					"value": "Dev"
+				}
+			}
 		}
 	},
 	"type": "TransformNode",
