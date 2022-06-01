@@ -29,7 +29,7 @@
 			"properties": {
 				"cognitoIdentityPoolId": {
 					"type": "string",
-					"value": "us-west-2:3eb8a906-3615-4894-8b5f-582420fe8e49"
+					"value": ""
 				}
 			}
 		}

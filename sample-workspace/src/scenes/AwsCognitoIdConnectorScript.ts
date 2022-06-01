@@ -1,3 +1,6 @@
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
+
 import { Node } from "@babylonjs/core/node";
 import { visibleInInspector } from "./decorators";
 import * as AWS from 'aws-sdk';

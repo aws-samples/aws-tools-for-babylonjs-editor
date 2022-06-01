@@ -1,3 +1,6 @@
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
+
 /**
  * @module
  * A set of utility functions for working with the browser DOM.
@@ -5,6 +8,7 @@
 
 /**
  * Makes the specified UI screen visible and hides all other UI screens.
+ * 
  * @param {string} id HTMLElement id of the screen to display.
  */
 export function showUiScreen(id: string) {
@@ -16,6 +20,7 @@ export function showUiScreen(id: string) {
 
 /**
  * Shows or hides an HTML element.
+ * 
  * @param {string} id HTMLElement id
  * @param {boolean} visible `true` shows the element. `false` hides it.
  */
