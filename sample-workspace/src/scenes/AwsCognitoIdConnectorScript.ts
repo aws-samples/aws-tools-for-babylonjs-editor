@@ -3,16 +3,16 @@ import { visibleInInspector } from "./decorators";
 import * as AWS from 'aws-sdk';
 import IAwsConnector from "./IAwsConnector";
 
-export default class AwsCognitoIdConnector extends Node implements IAwsConnector {
+export default class AwsCognitoIdConnectorScript extends Node implements IAwsConnector {
     @visibleInInspector('string', 'Cognito Identity Pool ID', '')
-    cognitoIdentityPoolId: string = '';
+    cognitoIdentityPoolId = '';
 
     /**
      * The AWS region to use when calling AWS services.
      */
     getRegion(): string | null {
         const cognitoId = this.cognitoIdentityPoolId.trim();
-        if (AwsCognitoIdConnector.validateCognitoIdentityPoolId(cognitoId)) {
+        if (AwsCognitoIdConnectorScript.validateCognitoIdentityPoolId(cognitoId)) {
             return cognitoId.split(':')[0];
         }
 
@@ -32,8 +32,8 @@ export default class AwsCognitoIdConnector extends Node implements IAwsConnector
         // property.
         if (!this._credentials) {
             const cognitoId = this.cognitoIdentityPoolId.trim();
-            if (!AwsCognitoIdConnector.validateCognitoIdentityPoolId(cognitoId)) {
-                alert(`You must set a valid Cognito Identity Pool ID on the "${this.name}" node.`);
+            if (!AwsCognitoIdConnectorScript.validateCognitoIdentityPoolId(cognitoId)) {
+                alert(`Error: You must set a valid Cognito Identity Pool ID on the "${this.name}" node.`);
                 return null;
             }
             this._credentials = new AWS.CognitoIdentityCredentials({

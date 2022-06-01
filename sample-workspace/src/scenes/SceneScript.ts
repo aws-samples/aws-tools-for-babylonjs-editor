@@ -1,7 +1,6 @@
-import { KeyboardEventTypes, KeyboardInfo, Mesh, Nullable, Scene } from "@babylonjs/core";
 import { Node } from "@babylonjs/core/node";
-import { fromScene, onKeyboardEvent, visibleInInspector } from "./decorators";
-import SumerianHost from "./sumerianhost";
+import { fromScene, visibleInInspector } from "./decorators";
+import SumerianHostScript from "./SumerianHostScript";
 import * as AWS from 'aws-sdk';
 import { aws as AwsFeatures } from '@amazon-sumerian-hosts/babylon';
 import { showUiScreen } from './domUtils';
@@ -37,7 +36,7 @@ export default class SceneScript extends Node {
     public awsConnector: IAwsConnector;
     
     @fromScene('SumerianHost')
-    protected hostNode: SumerianHost;
+    protected hostNode: SumerianHostScript;
 
     protected lex: AwsFeatures.LexFeature;
 

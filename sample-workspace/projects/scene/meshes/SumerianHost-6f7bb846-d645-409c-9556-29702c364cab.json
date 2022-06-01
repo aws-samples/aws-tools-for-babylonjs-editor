@@ -3,7 +3,7 @@
 		{
 			"name": "SumerianHost",
 			"id": "6f7bb846-d645-409c-9556-29702c364cab",
-			"uniqueId": 153,
+			"uniqueId": 154,
 			"type": "Mesh",
 			"position": [
 				0,
@@ -118,7 +118,7 @@
 					}
 				},
 				"script": {
-					"name": "src/scenes/sumerianhost.ts",
+					"name": "src/scenes/SumerianHostScript.ts",
 					"properties": {
 						"cognitoId": {
 							"type": "string",

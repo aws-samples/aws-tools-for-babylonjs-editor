@@ -46,7 +46,7 @@ type SumerianHostVoiceConfiguration = {
 // As we build out more runtime complexity into this plugin, this versioning should move there
 export const PLUGIN_VERSION = 'development';
 
-export default class SumerianHost extends Mesh {
+export default class SumerianHostScript extends Mesh {
 
   // ==== Inspector parameters ====
 
@@ -210,5 +210,4 @@ export default class SumerianHost extends Mesh {
       process.release.name === 'node'
     );
   }
-
 }
