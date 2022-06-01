@@ -46,14 +46,6 @@ export default class SceneScript extends Node {
     // @ts-ignore ignoring the super call as we don't want to re-init
     protected constructor() { }
 
-    /**
-     * Called when the node is being initialized. This function is called immediatly after the constructor has been called.
-     */
-    public onInitialize(): void { }
-
-    /**
-     * Called when the scene starts.
-     */
     public onStart(): void {
         this.hostNode.onHostReadyObserver.add(() => {
             this.initChatbot();
