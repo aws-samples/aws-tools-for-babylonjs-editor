@@ -37,7 +37,11 @@ Locate `Open Source Hosts Tools` in the editor toolbars. When you expand "Add Ho
 
 Select the "AWSConnector" node.
 
-In the Inspector, set the "Cognito Identity Pool ID" value of the attached script to a Cognito Identity Pool ID you've configured in your AWS account which has *"AmazonPollyReadOnlyAccess"*. For a full walk-through of how to set this up, see [AWS Infrastructure Setup.md](https://github.com/aws-samples/amazon-sumerian-hosts/blob/mainline2.0/AWS-Infrastructure-Setup.md). 
+In the Inspector, you should see a "Cognito Identity Pool ID" field. ⚠️ *If instead you see a spinning icon that doesn't go away, save your project (**File > Save Project**), reload the project (**File > Reload Project...**), and then select the "AWSConnector" node again.*
+
+Set the "Cognito Identity Pool ID" value of the attached script to a Cognito Identity Pool ID you've configured in your AWS account which has *"AmazonPollyReadOnlyAccess"*. For a full walk-through of how to set this up, see [AWS Infrastructure Setup.md](https://github.com/aws-samples/amazon-sumerian-hosts/blob/mainline2.0/AWS-Infrastructure-Setup.md). 
+
+
 
 ### Configure webpack
 

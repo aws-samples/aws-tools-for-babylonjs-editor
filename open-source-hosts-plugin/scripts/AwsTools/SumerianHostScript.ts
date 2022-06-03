@@ -48,20 +48,18 @@ type SumerianHostVoiceConfiguration = {
 export const PLUGIN_VERSION = 'development';
 
 export default class SumerianHostScript extends Mesh {
-  // ==== Inspector parameters ====
-
   @visibleInInspector('string', 'Voice ID', 'Joanna')
-  public pollyVoiceId: string;
+  public pollyVoiceId = 'Joanna';
 
   @visibleInInspector('string', 'Language ID', 'en-US')
-  public pollyLanguageId: string;
+  public pollyLanguageId = 'en-US';
 
   @visibleInInspector(
     'string',
     'Polly Engine ("standard" or "neural")',
     'neural'
   )
-  public pollyEngine: string;
+  public pollyEngine = 'neural';
 
   @fromScene('AWSConnector')
   public awsConnector: IAwsConnector;
@@ -93,11 +91,7 @@ export default class SumerianHostScript extends Mesh {
    */
   public host: HostObject | any;
 
-  /**
-   * Override constructor.
-   * @warn do not fill.
-   */
-  // @ts-ignore ignoring the super call as we don't want to re-init
+  // @ts-ignore DO NOT EDIT this empty constructor!
   protected constructor() {}
 
   /**

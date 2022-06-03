@@ -13,6 +13,9 @@ export default class AwsCognitoIdConnectorScript
   @visibleInInspector('string', 'Cognito Identity Pool ID', '')
   cognitoIdentityPoolId = '';
 
+  // @ts-ignore DO NOT EDIT this empty constructor!
+  protected constructor() {}
+
   /**
    * The AWS region to use when calling AWS services.
    */
@@ -53,13 +56,6 @@ export default class AwsCognitoIdConnectorScript
 
     return this._credentials;
   }
-
-  /**
-   * Override constructor.
-   * @warn do not fill.
-   */
-  // @ts-ignore ignoring the super call as we don't want to re-init
-  protected constructor() {}
 
   /**
    * Confirms whether the provided value is the the format of a valid

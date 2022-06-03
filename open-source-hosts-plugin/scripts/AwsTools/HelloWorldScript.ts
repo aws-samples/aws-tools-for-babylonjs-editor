@@ -14,6 +14,9 @@ import SumerianHostScript from './SumerianHostScript';
  * and then pressing the key again.
  */
 export default class HelloWorldScript extends Node {
+  // @ts-ignore DO NOT EDIT this empty constructor!
+  protected constructor() {}
+
   /**
    * The name of the host character object.
    */
