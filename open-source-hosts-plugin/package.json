@@ -12,13 +12,13 @@
         "type": "git",
         "url": "https://github.com/aws-samples/aws-tools-for-babylonjs-editor.git",
         "directory": "open-source-hosts-plugin"
-    },  
+    },
     "license": "Apache 2.0",
     "scripts": {
         "compile": "tsc -p .",
         "lint": "eslint . ",
         "lint-fix": "eslint . --fix",
-        "format": "prettier src/**/*.ts* scripts/*.ts* test/**/**.ts --write",
+        "format": "prettier src/**/*.ts* scripts/**/*.ts* test/**/**.ts --write",
         "build": "npm run format && npm run lint-fix && npm run compile && npm run copy-config",
         "test": "jest --verbose",
         "watch": "tsc -p . --watch",

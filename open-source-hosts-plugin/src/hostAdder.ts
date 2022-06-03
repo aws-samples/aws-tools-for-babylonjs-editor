@@ -129,13 +129,11 @@ class SumerianHostAdder {
    * can only have one script attached to it at a time.
    * @param characterAsset
    */
-  public attachInitScriptToHost(
-    characterAsset: AssetContainer,
-    scriptPath: string
-  ) {
+  public attachInitScriptToHost(characterAsset: AssetContainer) {
     const rootMesh = characterAsset.meshes[0];
     const metadata = rootMesh.metadata ?? {};
     const editorMetadata = metadata.editor ?? {};
+    const scriptPath = 'src/scenes/AwsTools/SumerianHostScript.ts';
 
     // This version of the Sumerian metadata includes absolute paths to local files --
     // these can be loaded by an application, such as the BabylonJS Editor

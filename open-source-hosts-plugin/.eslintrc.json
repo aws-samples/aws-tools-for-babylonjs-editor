@@ -19,6 +19,10 @@
     "sourceType": "module"
   },
   "rules": {
+    // The Babylon.js API often requires creating new objects via "new" even
+    // if we don't plan on referencing those objects directly through variables.
+    // Therefore, we must disable the "no-new" rule.
+    "no-new": "off",
     "react/destructuring-assignment": "off",
     "indent": [
       "error",
