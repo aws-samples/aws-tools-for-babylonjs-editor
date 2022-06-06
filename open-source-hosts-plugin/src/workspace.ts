@@ -39,16 +39,13 @@ class AssetsNotFoundError extends Error {
 
 // These are all relative to the package.json file of the respective projects
 const RELATIVE_ASSETS_DIR = 'assets';
-// const RELATIVE_GLTF_ASSETS_DIR = `${RELATIVE_ASSETS_DIR}/gLTF`;
 const RELATIVE_GLTF_ASSETS_DIR = path.join(RELATIVE_ASSETS_DIR, 'gLTF');
 
 // Any scripts in this plugin subdirectory will be copied to the workspace.
-// const RELATIVE_PLUGIN_SCRIPTS_PATH = 'scripts/AwsTools';
 const RELATIVE_PLUGIN_SCRIPTS_PATH = path.join('scripts', 'AwsTools');
 
 // BabylonJS Editor requires scripts be stored anywhere below the
 // `src/scenes/` directory within the workspace.
-// const RELATIVE_WORKSPACE_SCRIPTS_PATH = 'src/scenes/AwsTools';
 const RELATIVE_WORKSPACE_SCRIPTS_PATH = path.join('src', 'scenes', 'AwsTools');
 
 /**
