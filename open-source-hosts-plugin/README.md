@@ -41,24 +41,25 @@ In the Inspector, you should see a "Cognito Identity Pool ID" field. ⚠️ *If 
 
 Set the "Cognito Identity Pool ID" value of the attached script to a Cognito Identity Pool ID you've configured in your AWS account which has *"AmazonPollyReadOnlyAccess"*. For a full walk-through of how to set this up, see [AWS Infrastructure Setup.md](https://github.com/aws-samples/amazon-sumerian-hosts/blob/mainline2.0/AWS-Infrastructure-Setup.md). 
 
-
-
 ### Configure webpack
 
-The `@amazon-sumerian-hosts` library needs to be configured to use the same instance of BabylonJS as the rest of the project. To do this, add the following to the `module.exports.resolve` block in the `webpack.config.js` for the project:
+The `@amazon-sumerian-hosts` library needs to be configured to use the same instance of BabylonJS as the rest of the project. To do this, use an external text editor to open the  `webpack.config.js`  file stored in the root directory of your project workspace. Update the  `module.exports.resolve` section to match the following:
 
 ```
-		modules: ['node_modules'],
-		alias: {
-			'@babylonjs/core': path.resolve('./node_modules/@babylonjs/core')
-		}
+resolve: {
+  extensions: [".ts", ".js"],
+  modules: ['node_modules'],
+  alias: {
+    '@babylonjs/core': path.resolve('./node_modules/@babylonjs/core')
+  }
+},
 ```
 
 ### Test your host
 
 After you've completed the above steps your host character is ready for use in your application. If you run the scene now you'll see that the host character comes alive and always looks toward the camera as you move it. However, hosts are pretty boring until you start writing code to interact with them.
 
-To get you started, we've provided a simple "HelloWorldScript.ts". To use this script, do the following...
+To get you started, we've provided a simple script, "HelloWorldScript.ts". To use this script, do the following...
 
 Add a new dummy node to your scene using the **Add** button *at the top of the screen*: **Add > Dummy Node**.
 
@@ -66,10 +67,24 @@ Select the dummy node in the scene hierarchy.
 
 In the Asset Browser, locate the "HelloWorldScript.ts" found under `src/scenes/AwsTools/`. Attach this script to the dummy node by drag-dropping it from the Asset Browser to the "Script" section of the Inspector panel.
 
-In the Inspector, set the "Host Node Name" property to "Cristine" (or whichever host you added).
+In the Inspector, set the "Host Mesh" property to "Cristine" (or whichever host you added).
 
 *(Optional)* Change the value of the "Speech Text" property.
 
 Run the scene.
 
 Click anywhere in the scene to give it keyboard focus and then press the "t" key to make the host speak.
+
+## Next Steps
+
+Now that you have a working host character in your scene you can start building your custom functionality. Here are some things that will help...
+
+You can customize your character's voice by editing the "Voice ID", "Language ID", and "Polly Engine" values of the script attached to the host. See the official Amazon Polly documentation covering the [voices and languages available](https://docs.aws.amazon.com/polly/latest/dg/voicelist.html) and for information on the [standard and neural voice engines](https://docs.aws.amazon.com/polly/latest/dg/NTTS-main.html).
+
+As you can observe in the "HelloWorldScript.ts", you interact with the host API using the `.host` property of the SumerianHostScript object. For full details on the host API, see the following key documentation entries:
+
+- [HostObject](https://aws-samples.github.io/amazon-sumerian-hosts/babylonjs_HostObject.html) - This is the class type for the `hostScript.host` property.
+- [TextToSpeechFeature](https://aws-samples.github.io/amazon-sumerian-hosts/babylonjs_TextToSpeechFeature.html) - Available via `hostScript.host.TextToSpeechFeature`. Use this API for triggering speeches.
+- [PointOfInterestFeature](https://aws-samples.github.io/amazon-sumerian-hosts/babylonjs_PointOfInterestFeature.html) - Available via `hostScript.host.PointOfInterestFeature`. Use this API to control what the character is looking at.
+- [GestureFeature](https://aws-samples.github.io/amazon-sumerian-hosts/core_GestureFeature.html) - Available via `hostScript.host.GestureFeature`. Use this API to trigger built-in gestures and emotes.
+- [LexFeature](https://aws-samples.github.io/amazon-sumerian-hosts/babylonjs_LexFeature.html) - This class provides the ability to incorporate a Lex chatbox into your scene. The LexFeature class is can be used with or without a host. Use of this class is beyond the scope of this documentation but will be showcased in a future sample application.

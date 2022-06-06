@@ -20,7 +20,7 @@ export default class HelloWorldScript extends Node {
   /**
    * The name of the host character object.
    */
-  @visibleInInspector('string', 'Host Node Name', '')
+  @visibleInInspector('string', 'Host Mesh', '')
   public hostNodeName: string;
 
   /**

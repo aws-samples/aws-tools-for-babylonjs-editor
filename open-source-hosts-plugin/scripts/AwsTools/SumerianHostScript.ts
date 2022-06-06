@@ -33,13 +33,6 @@ type SumerianHostMetadata = {
   gestureConfigPath: string;
   animClipPaths: any;
   lookJoint: string;
-  pollyConfig: SumerianHostVoiceConfiguration;
-};
-
-type SumerianHostVoiceConfiguration = {
-  voice: string;
-  engine: string;
-  language: string;
 };
 
 // Our Github Actions will replace this with a commit SHA at release time

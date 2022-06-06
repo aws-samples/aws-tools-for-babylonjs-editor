@@ -143,13 +143,6 @@ class SumerianHostAdder {
       gestureConfigPath: this.characterConfig.gestureConfigUrl,
       animClipPaths: this.characterConfig.animUrls,
       lookJoint: this.characterConfig.lookJoint,
-      pollyConfig: {
-        voice: SumerianHostAdder.selectPollyVoiceFromPath(
-          this.characterConfig.modelUrl
-        ),
-        engine: 'neural',
-        language: 'en-US',
-      },
     };
     metadata.editor = editorMetadata;
 
@@ -178,14 +171,6 @@ class SumerianHostAdder {
     };
 
     rootMesh.metadata = metadata;
-  }
-
-  private static selectPollyVoiceFromPath(pathToCharacter: string): string {
-    if (pathToCharacter.includes('_male')) {
-      return 'Matthew';
-    }
-
-    return 'Joanna';
   }
 }
 
