@@ -15,7 +15,7 @@ export default class AwsCognitoIdConnectorScript
   implements IAwsConnector
 {
   @visibleInInspector('string', 'Cognito Identity Pool ID', '')
-    cognitoIdentityPoolId = '';
+  cognitoIdentityPoolId = '';
 
   // @ts-ignore DO NOT EDIT this empty constructor!
   protected constructor() {}

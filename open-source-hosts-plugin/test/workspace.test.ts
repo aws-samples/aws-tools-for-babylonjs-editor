@@ -1,4 +1,5 @@
 import fs from 'fs-extra';
+import path from 'path';
 import {
   AssetsNotFoundError,
   prepareWorkspace,
@@ -28,9 +29,12 @@ describe('workspace', () => {
 
       await prepareWorkspace('testPluginDir', 'testWorkSpaceDir');
 
+      const fromPath = path.join('testPluginDir', 'scripts', 'AwsTools');
+      const toPath = path.join('testWorkSpaceDir', 'src', 'scenes', 'AwsTools');
+
       expect(mockCopy).toHaveBeenCalledWith(
-        'testPluginDir/scripts/AwsTools',
-        'testWorkSpaceDir/src/scenes/AwsTools',
+        fromPath,
+        toPath,
         expect.anything()
       );
     });
@@ -41,9 +45,12 @@ describe('workspace', () => {
 
       await prepareWorkspace('testPluginDir', 'testWorkSpaceDir');
 
+      const fromPath = path.join('testPluginDir', 'assets', 'gLTF');
+      const toPath = path.join('testWorkSpaceDir', 'assets', 'gLTF');
+
       expect(mockCopy).toHaveBeenCalledWith(
-        'testPluginDir/assets/gLTF',
-        'testWorkSpaceDir/assets/gLTF',
+        fromPath,
+        toPath,
         expect.anything()
       );
     });
@@ -54,10 +61,14 @@ describe('workspace', () => {
 
       await prepareWorkspace('testPluginDir', 'testWorkSpaceDir');
 
-      expect(mockMkDir).toHaveBeenCalledWith(
-        'testWorkSpaceDir/src/scenes/AwsTools',
-        { recursive: true }
+      const scriptsDirPath = path.join(
+        'testWorkSpaceDir',
+        'src',
+        'scenes',
+        'AwsTools'
       );
+
+      expect(mockMkDir).toHaveBeenCalledWith(scriptsDirPath, {recursive: true});
     });
 
     it('should create workspace directories for glTF assets', async () => {
@@ -66,10 +77,9 @@ describe('workspace', () => {
 
       await prepareWorkspace('testPluginDir', 'testWorkSpaceDir');
 
-      expect(mockMkDir).toHaveBeenCalledWith(
-        'testWorkSpaceDir/assets/gLTF',
-        { recursive: true }
-      );
+      const gltfDirPath = path.join('testWorkSpaceDir', 'assets', 'gLTF');
+
+      expect(mockMkDir).toHaveBeenCalledWith(gltfDirPath, {recursive: true});
     });
 
     it('should throw custom WorkspaceNotPreparedError when there are errors with fs package', async () => {
