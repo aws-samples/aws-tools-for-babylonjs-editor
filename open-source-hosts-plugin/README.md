@@ -75,11 +75,11 @@ Run the scene.
 
 Click anywhere in the scene to give it keyboard focus and then press the "t" key to make the host speak.
 
-## Next Steps
+### Next Steps
 
 Now that you have a working host character in your scene you can start building your custom functionality. Here are some things that will help...
 
-You can customize your character's voice by editing the "Voice ID", "Language ID", and "Polly Engine" values of the script attached to the host. See the official Amazon Polly documentation covering the [voices and languages available](https://docs.aws.amazon.com/polly/latest/dg/voicelist.html) and for information on the [standard and neural voice engines](https://docs.aws.amazon.com/polly/latest/dg/NTTS-main.html).
+You can customize your character's voice by editing the "Voice ID", "Language ID", and "Polly Engine" values of the script attached to the host. See the official Amazon Polly documentation covering the [voices and languages available](https://docs.aws.amazon.com/polly/latest/dg/voicelist.html) and the [standard and neural voice engines](https://docs.aws.amazon.com/polly/latest/dg/NTTS-main.html) for more information.
 
 As you can observe in the "HelloWorldScript.ts", you interact with the host API using the `.host` property of the SumerianHostScript object. For full details on the host API, see the following key documentation entries:
 
@@ -87,4 +87,4 @@ As you can observe in the "HelloWorldScript.ts", you interact with the host API 
 - [TextToSpeechFeature](https://aws-samples.github.io/amazon-sumerian-hosts/babylonjs_TextToSpeechFeature.html) - Available via `hostScript.host.TextToSpeechFeature`. Use this API for triggering speeches.
 - [PointOfInterestFeature](https://aws-samples.github.io/amazon-sumerian-hosts/babylonjs_PointOfInterestFeature.html) - Available via `hostScript.host.PointOfInterestFeature`. Use this API to control what the character is looking at.
 - [GestureFeature](https://aws-samples.github.io/amazon-sumerian-hosts/core_GestureFeature.html) - Available via `hostScript.host.GestureFeature`. Use this API to trigger built-in gestures and emotes.
-- [LexFeature](https://aws-samples.github.io/amazon-sumerian-hosts/babylonjs_LexFeature.html) - This class provides the ability to incorporate a Lex chatbox into your scene. The LexFeature class is can be used with or without a host. Use of this class is beyond the scope of this documentation but will be showcased in a future sample application.
+- [LexFeature](https://aws-samples.github.io/amazon-sumerian-hosts/babylonjs_LexFeature.html) - This class provides the ability to incorporate a Lex chatbot into your scene. The LexFeature class can be used with or without a host. Use of this class is beyond the scope of this documentation but will be showcased in a future sample application.
