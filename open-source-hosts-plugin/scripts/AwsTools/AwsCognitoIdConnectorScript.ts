@@ -11,7 +11,7 @@ export default class AwsCognitoIdConnectorScript
   implements IAwsConnector
 {
   @visibleInInspector('string', 'Cognito Identity Pool ID', '')
-  cognitoIdentityPoolId = '';
+    cognitoIdentityPoolId = '';
 
   // @ts-ignore DO NOT EDIT this empty constructor!
   protected constructor() {}
@@ -58,7 +58,7 @@ export default class AwsCognitoIdConnectorScript
   }
 
   /**
-   * Confirms whether the provided value is the the format of a valid
+   * Confirms whether the provided value is in the form of a valid
    * Cognito Identity Pool ID.
    *
    * @param value Any string
