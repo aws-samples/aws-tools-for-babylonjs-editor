@@ -22,26 +22,66 @@ describe('workspace', () => {
   });
 
   describe('prepareWorkspace', () => {
-    it('should call copyFile and mkdir once separately', async () => {
+    it('should copy scripts to workspace', async () => {
       const mockCopy = jest.fn();
       jest.spyOn(fs, 'copy').mockImplementation(mockCopy);
+
       await prepareWorkspace('testPluginDir', 'testWorkSpaceDir');
 
-      expect(fs.promises.copyFile).toHaveBeenCalledTimes(1);
-      expect(fs.promises.mkdir).toHaveBeenCalledTimes(1);
-      expect(fs.copy).toHaveBeenCalledTimes(1);
+      expect(mockCopy).toHaveBeenCalledWith(
+        'testPluginDir/scripts/AwsTools',
+        'testWorkSpaceDir/src/scenes/AwsTools',
+        expect.anything()
+      );
+    });
+
+    it('should copy glTF assets to workspace', async () => {
+      const mockCopy = jest.fn();
+      jest.spyOn(fs, 'copy').mockImplementation(mockCopy);
+
+      await prepareWorkspace('testPluginDir', 'testWorkSpaceDir');
+
+      expect(mockCopy).toHaveBeenCalledWith(
+        'testPluginDir/assets/gLTF',
+        'testWorkSpaceDir/assets/gLTF',
+        expect.anything()
+      );
+    });
+
+    it('should create workspace directories for scripts', async () => {
+      const mockMkDir = jest.fn();
+      jest.spyOn(fs.promises, 'mkdir').mockImplementation(mockMkDir);
+
+      await prepareWorkspace('testPluginDir', 'testWorkSpaceDir');
+
+      expect(mockMkDir).toHaveBeenCalledWith(
+        'testWorkSpaceDir/src/scenes/AwsTools',
+        { recursive: true }
+      );
+    });
+
+    it('should create workspace directories for glTF assets', async () => {
+      const mockMkDir = jest.fn();
+      jest.spyOn(fs.promises, 'mkdir').mockImplementation(mockMkDir);
+
+      await prepareWorkspace('testPluginDir', 'testWorkSpaceDir');
+
+      expect(mockMkDir).toHaveBeenCalledWith(
+        'testWorkSpaceDir/assets/gLTF',
+        { recursive: true }
+      );
     });
 
     it('should throw custom WorkspaceNotPreparedError when there are errors with fs package', async () => {
+      // Fake a copy error.
+      // const mockCopy = jest.fn().mockRejectedValue(new Error('mock copy error'));
       jest
-        .spyOn(fs.promises, 'copyFile')
-        .mockRejectedValue(new WorkspaceNotPreparedError('Mocked Error'));
-      const mockCopy = jest.fn();
-      jest.spyOn(fs, 'copy').mockImplementation(mockCopy);
+        .spyOn(fs, 'copy')
+        .mockImplementation(() => Promise.reject(new Error('mock copy error')));
 
       await expect(
         prepareWorkspace('testPluginDir', 'testWorkSpaceDir')
-      ).rejects.toThrow(WorkspaceNotPreparedError);
+      ).rejects.toThrow(expect.any(WorkspaceNotPreparedError));
     });
   });
 
