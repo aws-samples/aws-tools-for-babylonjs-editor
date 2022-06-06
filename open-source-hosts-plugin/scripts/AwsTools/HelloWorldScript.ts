@@ -6,7 +6,7 @@ import SumerianHostScript from './SumerianHostScript';
 /**
  * This simple script will cause a host character to speak when the "t" key
  * is pressed. To use, attach this script to a dummy node in your scene, fill
- * in the "Host Node Name" value to match the name of the character object, and
+ * in the "Host Mesh" value to match the name of the character object, and
  * (optionally) change the "Speech Text" value.
  *
  * Note, when your scene is running it must have focus for keypresses to be
