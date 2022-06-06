@@ -6,6 +6,10 @@ import * as AWS from 'aws-sdk';
 import {visibleInInspector} from '../decorators';
 import IAwsConnector from './IAwsConnector';
 
+/**
+ * An IAwsConnector implementation which authenticates using a Cognito
+ * Identity Pool ID.
+ */
 export default class AwsCognitoIdConnectorScript
   extends Node
   implements IAwsConnector
