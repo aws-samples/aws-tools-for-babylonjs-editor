@@ -74,7 +74,6 @@ describe('workspace', () => {
 
     it('should throw custom WorkspaceNotPreparedError when there are errors with fs package', async () => {
       // Fake a copy error.
-      // const mockCopy = jest.fn().mockRejectedValue(new Error('mock copy error'));
       jest
         .spyOn(fs, 'copy')
         .mockImplementation(() => Promise.reject(new Error('mock copy error')));
