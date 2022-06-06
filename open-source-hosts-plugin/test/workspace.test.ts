@@ -81,7 +81,7 @@ describe('workspace', () => {
 
       await expect(
         prepareWorkspace('testPluginDir', 'testWorkSpaceDir')
-      ).rejects.toThrow(expect.any(WorkspaceNotPreparedError));
+      ).rejects.toThrow(WorkspaceNotPreparedError);
     });
   });
 
