@@ -94,7 +94,6 @@ export default class SumerianAddHostMenu extends React.Component<ISumerianAddHos
             awsConnectorNodeName,
             currentScene
           );
-          awsConnectorNode.metadata = {};
           awsConnectorNode.metadata = {
             script: {
               name: 'src/scenes/AwsTools/AwsCognitoIdConnectorScript.ts',
