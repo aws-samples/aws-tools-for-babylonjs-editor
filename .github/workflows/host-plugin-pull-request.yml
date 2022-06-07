@@ -20,7 +20,7 @@ jobs:
       # Believe it or not, the following perl statement works on ubuntu/windows/macos
       - name: "Set version number"
         run: |
-          perl -i -p -e "s/PLUGIN_VERSION = .*/PLUGIN_VERSION = '${{ github.sha }}';/" ${{ github.workspace }}/open-source-hosts-plugin/scripts/sumerianhost.ts
+          perl -i -p -e "s/PLUGIN_VERSION = .*/PLUGIN_VERSION = '${{ github.sha }}';/" ${{ github.workspace }}/open-source-hosts-plugin/scripts/AwsTools/SumerianHostScript.ts
       - run: npm install
         working-directory: "./open-source-hosts-plugin"
       - run: npm run release
