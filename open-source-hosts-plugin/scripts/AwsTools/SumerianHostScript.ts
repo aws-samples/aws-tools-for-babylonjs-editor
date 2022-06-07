@@ -21,7 +21,7 @@ type SumerianHostMetadata = {
 type BlendStateOption = {
   clip: string;
   name: string;
-}
+};
 
 type PoiConfigItem = {
   name: string;
@@ -31,8 +31,7 @@ type PoiConfigItem = {
   animation: string;
   blendStateOptions: BlendStateOption[];
   blendThresholds: number[][];
-
-}
+};
 
 type PoiConfig = PoiConfigItem[];
 
@@ -112,7 +111,9 @@ export default class SumerianHostScript extends Mesh {
    */
   public async onInitialize(): Promise<void> {
     const config: SumerianHostMetadata = this.getMetadata();
-    const poiConfig = await HostObject.loadJson(config.poiConfigPath) as PoiConfig;
+    const poiConfig = (await HostObject.loadJson(
+      config.poiConfigPath
+    )) as PoiConfig;
 
     await this.initHostCharacter(config, poiConfig);
     this.initPointOfInterestTracking(poiConfig, config.lookJoint);
@@ -147,7 +148,10 @@ export default class SumerianHostScript extends Mesh {
     this.host = HostObject.assembleHost(assets, this.getScene());
   }
 
-  protected initPointOfInterestTracking(poiConfig: PoiConfig, lookJoint: string): void {
+  protected initPointOfInterestTracking(
+    poiConfig: PoiConfig,
+    lookJoint: string
+  ): void {
     // have the Host track the scene's active camera
     HostObject.addPointOfInterestTracking(
       this.host,
