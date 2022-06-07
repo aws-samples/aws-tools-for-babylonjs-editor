@@ -7,6 +7,40 @@ import * as AWS from 'aws-sdk';
 import {fromScene, visibleInInspector} from '../decorators';
 import IAwsConnector from './IAwsConnector';
 
+type SumerianHostMetadata = {
+  bindPoseOffsetName: string;
+  poiConfigPath: string;
+  gestureConfigPath: string;
+  animClipPaths: any;
+  lookJoint: string;
+};
+
+/* Define data types for parameters required by the 
+@amazon-sumerian-hosts/babylon module. */
+
+type BlendStateOption = {
+  clip: string;
+  name: string;
+}
+
+type PoiConfigItem = {
+  name: string;
+  maxSpeed: number;
+  reference: string;
+  forwardAxis: string;
+  animation: string;
+  blendStateOptions: BlendStateOption[];
+  blendThresholds: number[][];
+
+}
+
+type PoiConfig = PoiConfigItem[];
+
+// Our Github Actions will replace this with a commit SHA at release time
+// Right now this script is the only runtime asset published by our plugin
+// As we build out more runtime complexity into this plugin, this versioning should move there
+export const PLUGIN_VERSION = 'development';
+
 /**
  * This is the script attached to a Sumerian Host. You will typically not need
  * to edit this script. Instead, other scripts in your scene should interact 
@@ -26,20 +60,6 @@ hostNode.onHostReadyObserver.add(() -> {
 });
  ```
  */
-
-type SumerianHostMetadata = {
-  bindPoseOffsetName: string;
-  poiConfigPath: string;
-  gestureConfigPath: string;
-  animClipPaths: any;
-  lookJoint: string;
-};
-
-// Our Github Actions will replace this with a commit SHA at release time
-// Right now this script is the only runtime asset published by our plugin
-// As we build out more runtime complexity into this plugin, this versioning should move there
-export const PLUGIN_VERSION = 'development';
-
 export default class SumerianHostScript extends Mesh {
   @visibleInInspector('string', 'Voice ID', 'Joanna')
   public pollyVoiceId = 'Joanna';
@@ -92,7 +112,7 @@ export default class SumerianHostScript extends Mesh {
    */
   public async onInitialize(): Promise<void> {
     const config: SumerianHostMetadata = this.getMetadata();
-    const poiConfig = await HostObject.loadJson(config.poiConfigPath);
+    const poiConfig = await HostObject.loadJson(config.poiConfigPath) as PoiConfig;
 
     await this.initHostCharacter(config, poiConfig);
     this.initPointOfInterestTracking(poiConfig, config.lookJoint);
@@ -101,8 +121,8 @@ export default class SumerianHostScript extends Mesh {
   }
 
   protected async initHostCharacter(
-    config: any,
-    poiConfig: any
+    config: SumerianHostMetadata,
+    poiConfig: PoiConfig
   ): Promise<void> {
     const bindPoseOffset = this._scene.animationGroups.find(
       (animGroup) => animGroup.name === config.bindPoseOffsetName
@@ -127,7 +147,7 @@ export default class SumerianHostScript extends Mesh {
     this.host = HostObject.assembleHost(assets, this.getScene());
   }
 
-  protected initPointOfInterestTracking(poiConfig, lookJoint): void {
+  protected initPointOfInterestTracking(poiConfig: PoiConfig, lookJoint: string): void {
     // have the Host track the scene's active camera
     HostObject.addPointOfInterestTracking(
       this.host,
