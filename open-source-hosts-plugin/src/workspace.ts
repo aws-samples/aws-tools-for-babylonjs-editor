@@ -39,13 +39,14 @@ class AssetsNotFoundError extends Error {
 
 // These are all relative to the package.json file of the respective projects
 const RELATIVE_ASSETS_DIR = 'assets';
-const RELATIVE_GLTF_ASSETS_DIR = `${RELATIVE_ASSETS_DIR}/gLTF`;
+const RELATIVE_GLTF_ASSETS_DIR = path.join(RELATIVE_ASSETS_DIR, 'gLTF');
 
-const RELATIVE_PLUGIN_SCRIPT_PATH = 'scripts/sumerianhost.ts';
+// Any scripts in this plugin subdirectory will be copied to the workspace.
+const RELATIVE_PLUGIN_SCRIPTS_PATH = path.join('scripts', 'AwsTools');
 
-// BabylonJS Editor expects to find scripts here, in the sense that
-// if you were to create a script in the editor, it would be created here
-const RELATIVE_WORKSPACE_SCRIPT_PATH = 'src/scenes/sumerianhost.ts';
+// BabylonJS Editor requires scripts be stored anywhere below the
+// `src/scenes/` directory within the workspace.
+const RELATIVE_WORKSPACE_SCRIPTS_PATH = path.join('src', 'scenes', 'AwsTools');
 
 /**
  * Copy the directory from one path to the other one.
@@ -120,15 +121,17 @@ const prepareWorkspace = async (
   try {
     const copyPromises: any[] = [];
 
-    // copy runtime script `sumerianhost.ts`
-    const pluginScriptPath = path.join(pluginDir, RELATIVE_PLUGIN_SCRIPT_PATH);
-    const workspaceScriptPath = path.join(
-      workSpaceDir,
-      RELATIVE_WORKSPACE_SCRIPT_PATH
+    // Copy our custom Editor scripts to the workspace.
+    const scriptsSourceDirectory = path.join(
+      pluginDir,
+      RELATIVE_PLUGIN_SCRIPTS_PATH
     );
-
+    const scriptsTargetDirectory = path.join(
+      workSpaceDir,
+      RELATIVE_WORKSPACE_SCRIPTS_PATH
+    );
     copyPromises.push(
-      fs.promises.copyFile(pluginScriptPath, workspaceScriptPath)
+      copyDirectory(scriptsSourceDirectory, scriptsTargetDirectory)
     );
 
     // copy asset directory into the workspace, so that they will be bundled relative to the workspace
@@ -171,5 +174,5 @@ export {
   WorkspaceNotPreparedError,
   RELATIVE_ASSETS_DIR,
   RELATIVE_GLTF_ASSETS_DIR,
-  RELATIVE_WORKSPACE_SCRIPT_PATH,
+  RELATIVE_WORKSPACE_SCRIPTS_PATH as RELATIVE_WORKSPACE_SCRIPT_PATH,
 };

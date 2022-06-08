@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 /* eslint-disable import/no-unresolved */
 import {MenuItem} from '@blueprintjs/core';
+import {TransformNode} from 'babylonjs';
 import {Editor, SceneExporter, WorkSpace} from 'babylonjs-editor';
 import React from 'react';
 import {SumerianHostAdder} from './hostAdder';
@@ -9,7 +10,6 @@ import {
   AssetsNotFoundError,
   installDependencies,
   prepareWorkspace,
-  RELATIVE_WORKSPACE_SCRIPT_PATH,
   WorkspaceNotPreparedError,
 } from './workspace';
 
@@ -87,6 +87,20 @@ export default class SumerianAddHostMenu extends React.Component<ISumerianAddHos
           selectedCharacter
         );
 
+        // Create AWSConnector node if not already present.
+        const awsConnectorNodeName = 'AWSConnector';
+        if (!currentScene.getNodeByName(awsConnectorNodeName)) {
+          const awsConnectorNode = new TransformNode(
+            awsConnectorNodeName,
+            currentScene
+          );
+          awsConnectorNode.metadata = {
+            script: {
+              name: 'src/scenes/AwsTools/AwsCognitoIdConnectorScript.ts',
+            },
+          };
+        }
+
         editor.updateTaskFeedback(
           addHostProgress,
           25,
@@ -99,10 +113,7 @@ export default class SumerianAddHostMenu extends React.Component<ISumerianAddHos
           50,
           'Attaching initialization script to Sumerian Host'
         );
-        hostAdder.attachInitScriptToHost(
-          characterAsset,
-          RELATIVE_WORKSPACE_SCRIPT_PATH
-        );
+        hostAdder.attachInitScriptToHost(characterAsset);
 
         editor.updateTaskFeedback(addHostProgress, 75, 'Updating editor');
 
