@@ -4,6 +4,10 @@ on:
   release:
     types: [created]
 
+
+permissions:
+  contents: read
+
 defaults:
   run:
     working-directory: "./open-source-hosts-plugin"
